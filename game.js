@@ -12,7 +12,7 @@ var gameGlobal = {
     turno: 0, 
     partidas: 3
 }
-var Empty = [];
+var Empty = [0,12,13,25,26,38,39,51];
 
 var swipeUp;
 
@@ -134,7 +134,7 @@ playGame.prototype = {
 
 			gameGlobal.partidas = 5;
         });
-		
+		console.log(Empty)
 		gameGlobal.turno += 1;
         
     },
@@ -146,13 +146,21 @@ playGame.prototype = {
         
         
     	var ultima = Empty[Empty.length-1]
-    	for (i = 0; i < Empty.length; i++) {
+        console.log("carta vieja: "+ carta)
+
+        while (Empty.indexOf(carta) !== -1) {
+            cardIndex += 2;
+            carta = this.deck[cardIndex];
+            console.log("carta Nueva: "+ carta)
+        }
+    	
+        /*for (i = 0; i < Empty.length; i++) {
             while (Empty[i] == carta)// || (ultima < carta-3 || ultima > carta+3)
              {
             	cardIndex += 2;
                 carta = this.deck[cardIndex];
             }
-        }
+        }*/
 	        
         Empty.push(carta);
         card.loadTexture("cards" + this.getCardTexture(carta));
@@ -284,7 +292,7 @@ playGame.prototype = {
                 turno: 1,
                 partidas: gameGlobal.partidas
             }
-            Empty = [];
+            Empty = [0,12,13,25,26,38,39,51];
             
             game.paused = false;
             e.playerScoreText.setText("0");
