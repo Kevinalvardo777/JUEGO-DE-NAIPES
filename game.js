@@ -40,8 +40,7 @@ playGame.prototype = {
 
         },
         
-    create: function() {
-        
+    create: function() {        
 
         game.stage.backgroundColor = "#FB968C" ;
         game.add.sprite(game.width * 101/144, game.height * 5/8, "tuPuntaje");
@@ -142,25 +141,27 @@ playGame.prototype = {
         var card = game.add.sprite(gameOptions.cardSheetWidth * gameOptions.cardScale / -2, game.height / 2, "cards0");
         card.anchor.set(0.5);
         card.scale.set(gameOptions.cardScale);
-        var carta = this.deck[cardIndex];
-        
+        var carta = this.deck[cardIndex];        
         
     	var ultima = Empty[Empty.length-1]
-        console.log("carta vieja: "+ carta)
 
+//Validacion de que no salga la misma carta
         while (Empty.indexOf(carta) !== -1) {
             cardIndex += 2;
             carta = this.deck[cardIndex];
-            console.log("carta Nueva: "+ carta)
         }
-    	
-        /*for (i = 0; i < Empty.length; i++) {
-            while (Empty[i] == carta)// || (ultima < carta-3 || ultima > carta+3)
-             {
-            	cardIndex += 2;
+
+//Cercania entre las cartas
+        if (cardIndex > 0) {
+            cartaM = carta % 12
+            ultimaM = ultima % 12
+            while (cartaM < ultimaM - 3 || cartaM > ultimaM + 3 || cartaM == ultimaM) {
+                console.log("Cartas no cercanas " + cartaM + ", " + ultimaM)
+                cardIndex += 2;
                 carta = this.deck[cardIndex];
+                cartaM = carta % 12;
             }
-        }*/
+        }
 	        
         Empty.push(carta);
         card.loadTexture("cards" + this.getCardTexture(carta));
@@ -245,15 +246,6 @@ playGame.prototype = {
         }, this)  
     },
 
-    /*actionOnClick: function(button3) {
-
-        this.button3.inputEnabled= true;
-        this.button3.events.onInputDown.add(function () { 
-        game.paused = false;
-        mensaje = game.add.text(game.width * 5/14, game.height /2, '3er intento', { fontSize: '50px', fill: '#000' });
-        return mensaje;
-        })
-    },*/
 
     addPlayerScore: function() {
         gameGlobal.playerScore += 1;
@@ -285,6 +277,7 @@ playGame.prototype = {
 
         var continuar = game.add.text(game.width * 11/28, game.height * 2/3, "Continuar", { fontSize: '150px', fill: '#000' })
         continuar.inputEnabled = true;
+//Si se presiona continuar
         continuar.events.onInputDown.add(function () { 
             gameGlobal = {
                 playerScore: 0,
