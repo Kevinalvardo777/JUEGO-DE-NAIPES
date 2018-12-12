@@ -142,7 +142,7 @@ playGame.prototype = {
         card.anchor.set(0.5);
         card.scale.set(gameOptions.cardScale);
         var carta = this.deck[cardIndex];        
-        
+        var comprobador = cardIndex;
     	var ultima = Empty[Empty.length-1]
 
 //Validacion de que no salga la misma carta
@@ -152,14 +152,15 @@ playGame.prototype = {
         }
 
 //Cercania entre las cartas
-        if (cardIndex > 0) {
-            cartaM = carta % 12
-            ultimaM = ultima % 12
+
+        if (comprobador == 1) {
+            cartaM = carta % 13
+            ultimaM = ultima % 13
             while (cartaM < ultimaM - 3 || cartaM > ultimaM + 3 || cartaM == ultimaM) {
-                console.log("Cartas no cercanas " + cartaM + ", " + ultimaM)
+                console.log("Cartas no cercanas " + ultimaM + ", " + cartaM)
                 cardIndex += 2;
                 carta = this.deck[cardIndex];
-                cartaM = carta % 12;
+                cartaM = carta % 13;
             }
         }
 	        
