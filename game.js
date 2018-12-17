@@ -10,9 +10,11 @@ var gameGlobal = {
     playerScore: 0,
     machineScore: 0,
     turno: 0, 
-    partidas: 3
+    partidas: 3,
+    ganador: true
 }
-var Empty = [0,12,13,25,26,38,39,51];
+var cartasJugadas = [];
+var cartasLimites = [0,12,13,25,26,38,39,51];
 
 var swipeUp;
 
@@ -86,7 +88,9 @@ playGame.prototype = {
         this.deck = Phaser.ArrayUtils.numberArray(0, 51);
         
         Phaser.ArrayUtils.shuffle(this.deck);
-        this.cardsInGame = [this.makeCard(0), this.makeCard(1)];
+//Eligiendo cartas que saldran
+		this.cardsInGame = [this.makeCard(0), this.makeCard(1)];                
+        
         this.nextCardIndex = 2;
         var tween = game.add.tween(this.cardsInGame[0]).to({
             x: game.width / 2
@@ -118,7 +122,7 @@ playGame.prototype = {
         game.input.onDown.add(this.beginSwipe, this);
         
 
-
+//Accion boton 3
         button3.events.onInputDown.add(function () { 
 			mensaje5.visible= false;
 			mensaje3.visible= true;
@@ -126,14 +130,14 @@ playGame.prototype = {
 			gameGlobal.partidas = 3;
         });
 
-
+//Accion boton 5
         button5.events.onInputDown.add(function () { 
 			mensaje5.visible= true;
 			mensaje3.visible= false;
 
 			gameGlobal.partidas = 5;
         });
-		console.log(Empty)
+		console.log(cartasJugadas)
 		gameGlobal.turno += 1;
         
     },
@@ -143,31 +147,46 @@ playGame.prototype = {
         card.scale.set(gameOptions.cardScale);
         var carta = this.deck[cardIndex];        
         var comprobador = cardIndex;
-    	var ultima = Empty[Empty.length-1]
+    	var ultima = cartasJugadas[cartasJugadas.length-1]
 
 //Validacion de que no salga la misma carta
-        while (Empty.indexOf(carta) !== -1) {
+        while (cartasLimites.indexOf(carta) !== -1 || cartasJugadas.indexOf(carta) !== -1) {
             cardIndex += 2;
             carta = this.deck[cardIndex];
         }
-
 //Cercania entre las cartas
-
         if (comprobador == 1) {
             cartaM = carta % 13
             ultimaM = ultima % 13
-            while (cartaM < ultimaM - 3 || cartaM > ultimaM + 3 || cartaM == ultimaM) {
+            while (cartaM < ultimaM - 3 || cartaM > ultimaM + 3 || cartaM == ultimaM || cartasLimites.indexOf(carta) !== -1 || cartasLimites.indexOf(carta) !== -1) {
                 console.log("Cartas no cercanas " + ultimaM + ", " + cartaM)
                 cardIndex += 2;
                 carta = this.deck[cardIndex];
                 cartaM = carta % 13;
             }
+//Que pierda si ganador = false
+/*
+            if (gameGlobal.turno == gameGlobal.partidas-1) {
+                if (gameGlobal.ganador) {                    
+                        console.log("Aqui se comprueba")
+                        cartaM = carta % 13
+                        ultimaM = ultima % 13
+                        while (cartaM <= ultimaM) {
+                            console.log("Cartas no cercanas " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+
+                }
+            }*/    
         }
-	        
-        Empty.push(carta);
+        
+        cartasJugadas.push(carta);
+        console.log(cartasJugadas)
         card.loadTexture("cards" + this.getCardTexture(carta));
         card.frame = this.getCardFrame(carta);
-        return card;
+        return card;        
     },
     getCardTexture: function(cardValue){
         return Math.floor((cardValue % 13) / 3) + 5 * Math.floor(cardValue / 26);
@@ -188,9 +207,19 @@ playGame.prototype = {
         var swipeNormal = Phaser.Point.normalize(swipeDistance);
         if(swipeMagnitude > 20 && swipeTime < 1000 && Math.abs(swipeNormal.y) > 0.8) {
             if(swipeNormal.y > 0.8) {
+                if (gameGlobal.turno == gameGlobal.partidas) {        //Si esta en el ultimo turno
+                    console.log("Entro a menor")
+                    var cartaSalvavidas = this.makeWinnerCard(1, false);
+                    this.cardsInGame = [cartasJugadas[cartasJugadas.length-1], cartaSalvavidas];                    
+                }
                 this.handleSwipe(1);
             }
             if(swipeNormal.y < -0.8) {
+                if (gameGlobal.turno == gameGlobal.partidas) {        //Si esta en el ultimo turno
+                    console.log("Entro a mayor")
+                    var cartaSalvavidas = this.makeWinnerCard(1, true);
+                    this.cardsInGame = [cartasJugadas[cartasJugadas.length-1], cartaSalvavidas];
+                }
                 this.handleSwipe(-1);
             }
         } else {
@@ -204,14 +233,20 @@ playGame.prototype = {
             x: game.width / 2
         }, 500, Phaser.Easing.Cubic.Out, true);
         tween.onComplete.add(function() {
-            var newCard = this.deck[this.nextCardIndex - 1];
-            var oldCard = this.deck[this.nextCardIndex - 2];
+            var newCard = cartasJugadas[cartasJugadas.length-1];
+            var oldCard = cartasJugadas[cartasJugadas.length-2];
             if(((dir == -1) && ((newCard % 13 > oldCard % 13) || ((newCard % 13 == oldCard % 13) && (newCard > oldCard)))) || ((dir == 1) && ((newCard % 13 < oldCard % 13) || ((newCard % 13 == oldCard % 13) && (newCard < oldCard))))){
+//Si acierta el jugador                
                 this.addPlayerScore();
+				console.log("Jugador gano")
+				console.log(" Carta Jugador: " + newCard + "Carta Maquina: " + oldCard)
                 game.time.events.add(Phaser.Timer.SECOND, this.fadeCards, this);                
             }
             else{
+//Si acierta la maquina
                 this.addMachineScore();
+				console.log("Maquina gano")
+				console.log(" Carta Jugador: " + newCard + "Carta Maquina: " + oldCard)
                 game.time.events.add(Phaser.Timer.SECOND, this.fadeCards, this);
                    
             }
@@ -264,6 +299,71 @@ playGame.prototype = {
         return false;
     },
 
+    makeWinnerCard: function(cardIndex, choice) {
+        var card = game.add.sprite(gameOptions.cardSheetWidth * gameOptions.cardScale / -2, game.height / 2, "cards0");
+        card.anchor.set(0.5);
+        card.scale.set(gameOptions.cardScale);
+        var carta = cartasJugadas[cartasJugadas.length-1];        
+        var comprobador = cardIndex;
+        var ultima = cartasJugadas[cartasJugadas.length-2]
+
+//Cercania entre las cartas
+/*
+        if (comprobador == 1) {     //Si se esta sacando la segunda carta
+            cartaM = carta % 13
+            ultimaM = ultima % 13
+            while (cartaM < ultimaM - 3 || cartaM > ultimaM + 3 || cartaM == ultimaM || cartasLimites.indexOf(carta) !== -1 || cartasJugadas.indexOf(carta) !== -1) {
+                console.log("Cartas no cercanas " + ultimaM + ", " + cartaM)
+                cardIndex += 2;
+                carta = this.deck[cardIndex];
+                cartaM = carta % 13;
+            }
+        } else {
+//Validacion de que no salga la misma carta
+            while (cartasLimites.indexOf(carta) !== -1 || cartasJugadas.indexOf(carta) !== -1) {
+                cardIndex += 2;
+                carta = this.deck[cardIndex];
+            }        
+        }*/
+//Que pierda si ganador = false
+        if (gameGlobal.turno == gameGlobal.partidas) {    //Si es el ultimo turno
+            console.log("Ultimo turno")
+            if (comprobador == 1) {                         //Si se esta sacando la segunda carta
+                console.log("Ultima carta")
+                if (gameGlobal.ganador) {                   //Si es ganador
+                    console.log("Es ganador")
+                    cartaM = carta % 13
+                    ultimaM = ultima % 13
+                    if (choice) {                           //Si escogio mayor
+                        console.log("Escogio mayor")
+                        while (cartaM <= ultimaM) {
+                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    } else {                                //Si escogio menor
+                        console.log("Escogio menor")
+                        while (cartaM >= ultimaM) {
+                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    }
+                }
+            }
+			console.log("Carta Salvavidas" + carta % 13)
+			cartasJugadas[cartasJugadas.length-1] = carta;
+			console.log(cartasJugadas)
+			card.loadTexture("cards" + this.getCardTexture(carta));
+			card.frame = this.getCardFrame(carta);
+			return card;  
+        }
+		console.log("ERROR-----------------")
+        return 0;     
+    },
+
     finalizar: function(e) {
         //mensaje de final del juego
         var mensaje;
@@ -284,9 +384,10 @@ playGame.prototype = {
                 playerScore: 0,
                 machineScore: 0,
                 turno: 1,
-                partidas: gameGlobal.partidas
+                partidas: gameGlobal.partidas,
+                ganador: true
             }
-            Empty = [0,12,13,25,26,38,39,51];
+            cartasJugadas = [cartasJugadas[cartasJugadas.length-2], cartasJugadas[cartasJugadas.length-1]];
             
             game.paused = false;
             e.playerScoreText.setText("0");
