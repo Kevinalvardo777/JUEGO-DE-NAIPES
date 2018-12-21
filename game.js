@@ -207,7 +207,7 @@ playGame.prototype = {
         var swipeNormal = Phaser.Point.normalize(swipeDistance);
         if(swipeMagnitude > 20 && swipeTime < 1000 && Math.abs(swipeNormal.y) > 0.8) {
             if(swipeNormal.y > 0.8) {
-                if (gameGlobal.turno == gameGlobal.partidas) {        //Si esta en el ultimo turno
+                if (gameGlobal.turno >= gameGlobal.partidas-1) {        //Si esta en el ultimo turno
                     console.log("Entro a menor")
                     var cartaSalvavidas = this.makeWinnerCard(1, false);
                     this.cardsInGame = [cartasJugadas[cartasJugadas.length-1], cartaSalvavidas];                    
@@ -215,7 +215,7 @@ playGame.prototype = {
                 this.handleSwipe(1);
             }
             if(swipeNormal.y < -0.8) {
-                if (gameGlobal.turno == gameGlobal.partidas) {        //Si esta en el ultimo turno
+                if (gameGlobal.turno >= gameGlobal.partidas -1) {        //Si esta en el ultimo turno
                     console.log("Entro a mayor")
                     var cartaSalvavidas = this.makeWinnerCard(1, true);
                     this.cardsInGame = [cartasJugadas[cartasJugadas.length-1], cartaSalvavidas];
@@ -328,6 +328,7 @@ playGame.prototype = {
             }        
         }*/
 //Que pierda si ganador = false
+console.log("validacion de ultimo turno")
         if (gameGlobal.turno == gameGlobal.partidas) {    //Si es el ultimo turno
             console.log("Ultimo turno")
             if (comprobador == 1) {                         //Si se esta sacando la segunda carta
@@ -376,12 +377,75 @@ playGame.prototype = {
                     }
                 }
             }
+
+            
 			console.log("Carta Salvavidas" + carta % 13)
 			cartasJugadas[cartasJugadas.length-1] = carta;
 			console.log(cartasJugadas)
 			card.loadTexture("cards" + this.getCardTexture(carta));
 			card.frame = this.getCardFrame(carta);
 			return card;  
+
+
+        }
+
+        //Para penultimo turno 
+        console.log("validacion de penultimo turno")
+
+        if (gameGlobal.turno == gameGlobal.partidas - 1) {    //Si es el ultimo turno
+            console.log("penultimo turno")
+            if (comprobador == 1) {                         //Si se esta sacando la segunda carta
+                console.log("Ultima carta")
+                cartaM = carta % 13
+                ultimaM = ultima % 13
+                if(gameGlobal.playerScore== 1){
+                    if (choice) {                           //Si escogio mayor
+                        console.log("Escogio mayor")
+                        while (cartaM >= ultimaM) {
+                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    } else {                                //Si escogio menor
+                        console.log("Escogio menor")
+                        while (cartaM <= ultimaM) {
+                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    }
+                
+                } else {
+                    if  (choice) {                           //Si escogio mayor
+                        console.log("Escogio mayor")
+                        while (cartaM <= ultimaM) {
+                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    } else {                                //Si escogio menor
+                        console.log("Escogio menor")
+                        while (cartaM >= ultimaM) {
+                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    }
+                
+                }
+                
+            }
+
+            console.log("Carta Salvavidas" + carta % 13)
+            cartasJugadas[cartasJugadas.length-1] = carta;
+            console.log(cartasJugadas)
+            card.loadTexture("cards" + this.getCardTexture(carta));
+            card.frame = this.getCardFrame(carta);
+            return card; 
         }
 		console.log("ERROR-----------------")
         return 0;     
