@@ -158,12 +158,15 @@ playGame.prototype = {
         if (comprobador == 1) {
             cartaM = carta % 13
             ultimaM = ultima % 13
-            while (cartaM < ultimaM - 3 || cartaM > ultimaM + 3 || cartaM == ultimaM || cartasLimites.indexOf(carta) !== -1 || cartasLimites.indexOf(carta) !== -1) {
-                console.log("Cartas no cercanas " + ultimaM + ", " + cartaM)
-                cardIndex += 2;
-                carta = this.deck[cardIndex];
-                cartaM = carta % 13;
+            if (Math.floor(Math.random() * 10) < 7) {
+                while (cartaM < ultimaM - 3 || cartaM > ultimaM + 3 || cartaM == ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                    console.log("Cartas no cercanas " + ultimaM + ", " + cartaM)
+                    cardIndex += 2;
+                    carta = this.deck[cardIndex];
+                    cartaM = carta % 13;
+                }
             }
+            
 //Que pierda si ganador = false
 /*
             if (gameGlobal.turno == gameGlobal.partidas-1) {
