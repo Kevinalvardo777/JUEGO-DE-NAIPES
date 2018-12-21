@@ -11,7 +11,7 @@ var gameGlobal = {
     machineScore: 0,
     turno: 0, 
     partidas: 3,
-    ganador: true
+    ganador: false
 }
 var cartasJugadas = [];
 var cartasLimites = [0,12,13,25,26,38,39,51];
@@ -235,18 +235,20 @@ playGame.prototype = {
         tween.onComplete.add(function() {
             var newCard = cartasJugadas[cartasJugadas.length-1];
             var oldCard = cartasJugadas[cartasJugadas.length-2];
-            if(((dir == -1) && ((newCard % 13 > oldCard % 13) || ((newCard % 13 == oldCard % 13) && (newCard > oldCard)))) || ((dir == 1) && ((newCard % 13 < oldCard % 13) || ((newCard % 13 == oldCard % 13) && (newCard < oldCard))))){
+            console.log("direccion :" + dir)
+            if(((dir == -1) && ((newCard % 13 > oldCard % 13) || ((newCard % 13 == oldCard % 13) && (newCard > oldCard))))
+             || ((dir == 1) && ((newCard % 13 < oldCard % 13) || ((newCard % 13 == oldCard % 13) && (newCard < oldCard))))){
 //Si acierta el jugador                
                 this.addPlayerScore();
 				console.log("Jugador gano")
-				console.log(" Carta Jugador: " + newCard + "Carta Maquina: " + oldCard)
+				console.log(" Carta Jugador: " + newCard + " O " + newCard%13 + " Carta Maquina: " + oldCard+ " O " + oldCard%13)
                 game.time.events.add(Phaser.Timer.SECOND, this.fadeCards, this);                
             }
             else{
 //Si acierta la maquina
                 this.addMachineScore();
 				console.log("Maquina gano")
-				console.log(" Carta Jugador: " + newCard + "Carta Maquina: " + oldCard)
+				console.log(" Carta Jugador: " + newCard + " O " + newCard%13 + " Carta Maquina: " + oldCard+ " O " + oldCard%13)
                 game.time.events.add(Phaser.Timer.SECOND, this.fadeCards, this);
                    
             }
@@ -351,6 +353,27 @@ playGame.prototype = {
                             cartaM = carta % 13;
                         }
                     }
+                } else {
+                    console.log("Es perdedor")
+                    cartaM = carta % 13
+                    ultimaM = ultima % 13
+                    if (choice) {                           //Si escogio mayor
+                        console.log("Escogio mayor")
+                        while (cartaM >= ultimaM) {
+                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    } else {                                //Si escogio menor
+                        console.log("Escogio menor")                        
+                        while (cartaM <= ultimaM) {
+                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    }
                 }
             }
 			console.log("Carta Salvavidas" + carta % 13)
@@ -385,7 +408,7 @@ playGame.prototype = {
                 machineScore: 0,
                 turno: 1,
                 partidas: gameGlobal.partidas,
-                ganador: true
+                ganador: gameGlobal.ganador
             }
             cartasJugadas = [cartasJugadas[cartasJugadas.length-2], cartasJugadas[cartasJugadas.length-1]];
             
