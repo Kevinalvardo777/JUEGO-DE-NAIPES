@@ -43,7 +43,6 @@ playGame.prototype = {
         },
         
     create: function() {        
-
         game.stage.backgroundColor = "#FB968C" ;
         game.add.sprite(game.width * 101/144, game.height * 5/8, "tuPuntaje");
         game.add.sprite(game.width * 1/7, game.height * 5/8, "puntajeMaquina");
@@ -213,16 +212,18 @@ playGame.prototype = {
                 if (gameGlobal.turno >= gameGlobal.partidas-1) {        //Si esta en el ultimo turno
                     console.log("Entro a menor")
                     var cartaSalvavidas = this.makeWinnerCard(1, false);
-                    this.cardsInGame = [cartasJugadas[cartasJugadas.length-1], cartaSalvavidas];                    
+                    this.cardsInGame = [this.cardsInGame[0], cartaSalvavidas];              
                 }
+                console.log("Se llama a handleSwipe(1)")
                 this.handleSwipe(1);
             }
             if(swipeNormal.y < -0.8) {
                 if (gameGlobal.turno >= gameGlobal.partidas -1) {        //Si esta en el ultimo turno
                     console.log("Entro a mayor")
                     var cartaSalvavidas = this.makeWinnerCard(1, true);
-                    this.cardsInGame = [cartasJugadas[cartasJugadas.length-1], cartaSalvavidas];
+                    this.cardsInGame = [this.cardsInGame[0], cartaSalvavidas];
                 }
+                console.log("Se llama a handleSwipe(-1)")
                 this.handleSwipe(-1);
             }
         } else {
@@ -230,7 +231,9 @@ playGame.prototype = {
         }
     },
     handleSwipe: function(dir) {
+    	console.log("Empieza handleSwipe")
         var cardToMove = (this.nextCardIndex + 1) % 2;
+        console.log("Carta a mover: "+cardToMove)
         this.cardsInGame[cardToMove].y += dir * gameOptions.cardSheetHeight * gameOptions.cardScale * 1.1;
         var tween = game.add.tween(this.cardsInGame[cardToMove]).to({
             x: game.width / 2
@@ -258,6 +261,7 @@ playGame.prototype = {
         }, this)
     },
     moveCards: function() {
+    	console.log("Empieza moveCards")
         var cardToMove = this.nextCardIndex % 2;
         var moveOutTween = game.add.tween(this.cardsInGame[cardToMove]).to({
             x: game.width + gameOptions.cardSheetWidth * gameOptions.cardScale
@@ -277,11 +281,24 @@ playGame.prototype = {
         }, this)
     },
     fadeCards: function(){
-        for(var i = 0; i < 2; i++){
+    	console.log("cardsInGame 0: " + this.cardsInGame[0])
+    	console.log("cardsInGame 1: " + this.cardsInGame[1])
+    	var tween = game.add.tween(this.cardsInGame[0]).to({
+            x: game.width / 12,
+            y: game.width / 8
+        }, 500, Phaser.Easing.Cubic.Out, true);
+        var tween = game.add.tween(this.cardsInGame[1]).to({
+            x: game.width - (game.width / 12),
+            y: game.width / 8
+        }, 500, Phaser.Easing.Cubic.Out, true);
+        /*
+        for(var i = 0; i < 2; i++){    	
+	        
             var fadeTween = game.add.tween(this.cardsInGame[i]).to({
                 alpha: 0
             }, 500, Phaser.Easing.Linear.None, true);
-        }
+            
+        }*/
         game.time.events.add(Phaser.Timer.SECOND, function(){
             game.state.start("PlayGame");    
         }, this)  
