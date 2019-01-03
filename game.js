@@ -39,7 +39,8 @@ playGame.prototype = {
         game.load.image("puntajeMaquina", "puntajeMaquina.png");
         game.load.spritesheet("button3", "button3.png", 302, 200);
         game.load.spritesheet("button5", "button5.png", 302, 200);
-
+        this.cartaMaquina = []
+        this.cartaJugador = []
         },
         
     create: function() {        
@@ -71,7 +72,22 @@ playGame.prototype = {
         this.playerScoreText = game.add.text(game.width * 25/32, game.height * 3/4, '' + gameGlobal.playerScore, { fontSize: '80px', fill: '#000' });
         this.machineScoreText = game.add.text(game.width / 4.5, game.height * 3/4, '' + gameGlobal.machineScore, { fontSize: '80px', fill: '#000' });
 
+        for (var i = 0; i < gameGlobal.turno; i++) {
+            cartaTemporal = cartasJugadas[cartasJugadas.length-(2 * (i+1))]
+            this.cartaMaquina[i] = game.add.sprite((game.width / 12) + (i * 300),
+                game.width / 8, "cards0");
+            this.cartaMaquina[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
+            this.cartaMaquina[i].frame = this.getCardFrame(cartaTemporal);
 
+            cartaTemporal = cartasJugadas[cartasJugadas.length- (1 + (i*2))]
+            console.log("Carta del jugador Temporal: "+ cartaTemporal + ", " + cartaTemporal%13)
+            this.cartaJugador[i] = game.add.sprite((game.width - (game.width / 12)) - (i * 300),
+                game.width / 8, "cards0");
+            this.cartaJugador[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
+            this.cartaJugador[i].frame = this.getCardFrame(cartaTemporal);
+        }
+
+        
 
         var textoTusNaipes = "TUS NAIPES";
         var style = {font: "40px Arial", fill: "#ffffff", align: "center"};
@@ -494,6 +510,15 @@ console.log("validacion de ultimo turno")
                 partidas: gameGlobal.partidas,
                 ganador: gameGlobal.ganador
             }
+            /*
+            e.cartaMaquina = [];
+            e.cartaJugador = [];
+            */
+            for (var i = 0; i < gameGlobal.partidas; i++) {
+                e.cartaMaquina[i].destroy();
+                e.cartaJugador[i].destroy();
+            }
+
             cartasJugadas = [cartasJugadas[cartasJugadas.length-2], cartasJugadas[cartasJugadas.length-1]];
             
             game.paused = false;
