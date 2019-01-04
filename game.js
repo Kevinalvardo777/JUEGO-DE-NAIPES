@@ -76,6 +76,8 @@ playGame.prototype = {
             cartaTemporal = cartasJugadas[cartasJugadas.length-(2 * (i+1))]
             this.cartaMaquina[i] = game.add.sprite((game.width / 12) + (i * 300),
                 game.width / 8, "cards0");
+            this.cartaMaquina[i].anchor.set(0.5);
+        	this.cartaMaquina[i].scale.set(gameOptions.cardScale);
             this.cartaMaquina[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
             this.cartaMaquina[i].frame = this.getCardFrame(cartaTemporal);
 
@@ -83,6 +85,8 @@ playGame.prototype = {
             console.log("Carta del jugador Temporal: "+ cartaTemporal + ", " + cartaTemporal%13)
             this.cartaJugador[i] = game.add.sprite((game.width - (game.width / 12)) - (i * 300),
                 game.width / 8, "cards0");
+            this.cartaJugador[i].anchor.set(0.5);
+        	this.cartaJugador[i].scale.set(gameOptions.cardScale);
             this.cartaJugador[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
             this.cartaJugador[i].frame = this.getCardFrame(cartaTemporal);
         }
