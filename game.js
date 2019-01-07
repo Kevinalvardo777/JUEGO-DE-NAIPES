@@ -27,6 +27,7 @@ window.onload = function() {
 var playGame = function(game) {}
 playGame.prototype = {
     preload: function() {
+        game.load.image("background", "mesa2-01.png");
         for(var i = 0; i < 10; i++){
             game.load.spritesheet("cards" + i, "cards" + i + ".png", gameOptions.cardSheetWidth, gameOptions.cardSheetHeight);
         }
@@ -43,8 +44,8 @@ playGame.prototype = {
         this.cartaJugador = []
         },
         
-    create: function() {        
-        game.stage.backgroundColor = "#FB968C" ;
+    create: function() {
+        game.add.tileSprite(0, 0, Math.floor(gameOptions.gameWidth/2) *2, Math.floor(gameOptions.gameHeight/2) *2, 'background');
         game.add.sprite(game.width * 101/144, game.height * 5/8, "tuPuntaje");
         game.add.sprite(game.width * 1/7, game.height * 5/8, "puntajeMaquina");
 
@@ -178,7 +179,7 @@ playGame.prototype = {
             cartaM = carta % 13
             ultimaM = ultima % 13
             if (Math.floor(Math.random() * 10) < 7) {
-                while (cartaM < ultimaM - 3 || cartaM > ultimaM + 3 || cartaM == ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                while (cartaM < ultimaM - 3 || cartaM > ultimaM + 3 || cartaM == ultimaM || cartasJugadas.indexOf(carta) !== -1 || cartasLimites.indexOf(carta) !== -1) {
                     console.log("Cartas no cercanas " + ultimaM + ", " + cartaM)
                     cardIndex += 2;
                     carta = this.deck[cardIndex];
@@ -379,7 +380,7 @@ console.log("validacion de ultimo turno")
                     ultimaM = ultima % 13
                     if (choice) {                           //Si escogio mayor
                         console.log("Escogio mayor")
-                        while (cartaM <= ultimaM) {
+                        while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
                             console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
@@ -387,7 +388,7 @@ console.log("validacion de ultimo turno")
                         }
                     } else {                                //Si escogio menor
                         console.log("Escogio menor")
-                        while (cartaM >= ultimaM) {
+                        while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
                             console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
@@ -400,7 +401,7 @@ console.log("validacion de ultimo turno")
                     ultimaM = ultima % 13
                     if (choice) {                           //Si escogio mayor
                         console.log("Escogio mayor")
-                        while (cartaM >= ultimaM) {
+                        while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
                             console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
@@ -408,7 +409,7 @@ console.log("validacion de ultimo turno")
                         }
                     } else {                                //Si escogio menor
                         console.log("Escogio menor")                        
-                        while (cartaM <= ultimaM) {
+                        while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
                             console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
@@ -441,7 +442,7 @@ console.log("validacion de ultimo turno")
                 if(gameGlobal.playerScore== 1){
                     if (choice) {                           //Si escogio mayor
                         console.log("Escogio mayor")
-                        while (cartaM >= ultimaM) {
+                        while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
                             console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
@@ -449,7 +450,7 @@ console.log("validacion de ultimo turno")
                         }
                     } else {                                //Si escogio menor
                         console.log("Escogio menor")
-                        while (cartaM <= ultimaM) {
+                        while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
                             console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
@@ -460,7 +461,7 @@ console.log("validacion de ultimo turno")
                 } else {
                     if  (choice) {                           //Si escogio mayor
                         console.log("Escogio mayor")
-                        while (cartaM <= ultimaM) {
+                        while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
                             console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
@@ -468,7 +469,7 @@ console.log("validacion de ultimo turno")
                         }
                     } else {                                //Si escogio menor
                         console.log("Escogio menor")
-                        while (cartaM >= ultimaM) {
+                        while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
                             console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
