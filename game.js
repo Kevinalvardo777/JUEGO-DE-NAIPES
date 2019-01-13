@@ -6,7 +6,7 @@ var gameOptions = {
     cardSheetHeight: 440,
     cardScale: 0.8,
     flipZoom: 1.2,
-    flipSpeed: 500
+    flipSpeed: 1000
 
 }
 var gameGlobal = {
@@ -54,6 +54,7 @@ playGame.prototype = {
         },
         
     create: function() {
+
         game.add.tileSprite(0, 0, Math.floor(gameOptions.gameWidth/2) *2, Math.floor(gameOptions.gameHeight/2) *2, 'background');
         if (gameGlobal.turno == 0) {
         	barajaSprite = game.add.sprite(game.width * 1/6, -700, "baraja");
@@ -138,12 +139,9 @@ playGame.prototype = {
         
         this.nextCardIndex = 2;
 
-        var fondoCarta = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/12) + barajaSprite.height/2, "fondoCarta");
-        fondoCarta.anchor.set(0.5);
-        fondoCarta.scale.set(gameOptions.cardScale);
-        fondoCarta.angle += 5;        
+               
         
-        var tween = this.flipCard(fondoCarta, this.cardsInGame[0])
+        var tween = this.flipCard(this, this.cardsInGame[0])
 
         tween.onComplete.add(function(){
             this.infoGroup.visible = true;
@@ -543,14 +541,20 @@ console.log("validacion de ultimo turno")
     },
 
 
-    flipCard: function(card, cardFront) {
+    flipCard: function(e, cardFront) {
+    	e.cardBack = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/12) + barajaSprite.height/2, "fondoCarta");
+        e.cardBack.anchor.set(0.5);
+        e.cardBack.scale.set(gameOptions.cardScale);
+        e.cardBack.angle += 5;
+        e.cardBack.visible = false;
 
-    	card.isFlipping = true;
-    	card.scale.set(gameOptions.cardScale);
+
+    	e.cardBack.isFlipping = true;
+    	e.cardBack.scale.set(gameOptions.cardScale);
     	cardFront.isFlipping = true;
     	cardFront.scale.set(gameOptions.cardScale);
     	cardFront.angle += 5;
-	    flipTween = game.add.tween(card.scale).to({
+	    flipTween = game.add.tween(e.cardBack.scale).to({
 	            x: 0,
 	            y: gameOptions.flipZoom
 	        }, gameOptions.flipSpeed / 2, Phaser.Easing.Linear.None);
@@ -561,7 +565,7 @@ console.log("validacion de ultimo turno")
 	        });
 
 	        // second tween: we complete the flip and lower the card
-	        backFlipTween = game.add.tween(card.scale).to({
+	        backFlipTween = game.add.tween(e.cardBack.scale).to({
 	            x: 1,
 	            y: 1
 	        }, gameOptions.flipSpeed / 2, Phaser.Easing.Linear.None);
@@ -574,6 +578,7 @@ console.log("validacion de ultimo turno")
 	        flipTween.onComplete.add(function(){
 	        	cardFront.visible = true;
 	        	cardFront.angle -= 5;
+	        	e.cardBack.visible = false;
 	            backFlipTween.start();
 	        });
 
@@ -583,24 +588,30 @@ console.log("validacion de ultimo turno")
 	        }, gameOptions.flipSpeed / 2, Phaser.Easing.Linear.None);
 
 	        backFlipTween.onComplete.add(function(){
-	        	console.log("ESCALANDO")
+	        	e.cardBack.visible = false;
 	        	
-	            card.isFlipping = false;
+	            e.cardBack.isFlipping = false;
 	        });
-	        console.log("FLIP!! " + card)
+	        console.log("FLIP!! " + e.cardBack)
+	        if (gameGlobal.turno == gameGlobal.partidas) {
+	        	e.cardBack.visible = false;
+	        } else {
+	        	e.cardBack.visible = true;
+	        }
+	        
 	        flipTween.start()
 	        flipTween2.start()
 
-	        game.add.tween(card).to({
+	        game.add.tween(e.cardBack).to({
 	        	y: game.height * 2 / 3,
 	            x: game.width / 2
-	        }, 1000, Phaser.Easing.Cubic.Out, true);	        
+	        }, 2000, Phaser.Easing.Cubic.Out, true);	        
 	        
 
 	        return game.add.tween(cardFront).to({
 	        	y: game.height * 2 / 3,
 	            x: game.width / 2
-	        }, 1000, Phaser.Easing.Cubic.Out, true);
+	        }, 2000, Phaser.Easing.Cubic.Out, true);
 
     },
 
@@ -619,7 +630,8 @@ console.log("validacion de ultimo turno")
         var continuar = game.add.text(game.width * 11/28, game.height * 2/3, "Continuar", { fontSize: '150px', fill: '#000' })
         continuar.inputEnabled = true;
 //Si se presiona continuar
-        continuar.events.onInputDown.add(function () { 
+        continuar.events.onInputDown.add(function () {
+
             gameGlobal = {
                 playerScore: 0,
                 machineScore: 0,
@@ -637,12 +649,13 @@ console.log("validacion de ultimo turno")
             }
 
             cartasJugadas = [cartasJugadas[cartasJugadas.length-2], cartasJugadas[cartasJugadas.length-1]];
-            
+            e.cardBack.visible = true;
             game.paused = false;
             e.playerScoreText.setText("0");
             e.machineScoreText.setText("0");
             continuar.destroy();
-            mensaje.destroy();	
+            mensaje.destroy();
+
         });
         
 
