@@ -4,7 +4,10 @@ var gameOptions = {
     gameHeight: 1334,
     cardSheetWidth: 334,
     cardSheetHeight: 440,
-    cardScale: 0.8
+    cardScale: 0.8,
+    flipZoom: 1.2,
+    flipSpeed: 500
+
 }
 var gameGlobal = {
     playerScore: 0,
@@ -31,7 +34,13 @@ playGame.prototype = {
         for(var i = 0; i < 10; i++){
             game.load.spritesheet("cards" + i, "cards" + i + ".png", gameOptions.cardSheetWidth, gameOptions.cardSheetHeight);
         }
+        
+        game.load.image("fondoCarta", "carta_imajen_fondo.png");
+        game.load.image("baraja", "baraja-poker-01.png");
         game.load.spritesheet("indicaciones", "indicaciones.png", 500, 184);
+        game.load.spritesheet("indicaciones", "indicaciones.png", 500, 184);
+        game.load.image("barraLinea", "Barra_linea_celeste.png");
+        game.load.image("boton", "boton_celeste.png");
         game.load.spritesheet("swipe", "swipe.png", 80, 130);
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         game.scale.pageAlignHorizontally = true;
@@ -46,6 +55,22 @@ playGame.prototype = {
         
     create: function() {
         game.add.tileSprite(0, 0, Math.floor(gameOptions.gameWidth/2) *2, Math.floor(gameOptions.gameHeight/2) *2, 'background');
+        if (gameGlobal.turno == 0) {
+        	barajaSprite = game.add.sprite(game.width * 1/6, -700, "baraja");
+
+        	var tween = game.add.tween(barajaSprite).to({
+	            y: game.height / 12
+	        }, 1000, Phaser.Easing.Cubic.Out, true);
+
+        } else {
+        	barajaSprite = game.add.sprite(game.width * 1/6, game.height * 1/12, "baraja");
+        }
+
+        barraLinea = game.add.sprite(game.width * 2/3, game.height * 1/4, "barraLinea");
+        boton = game.add.sprite((game.width * 2/3) - (barraLinea.width * 5/6) , game.height * 3/7, "boton");
+
+        game.physics.enable(boton, Phaser.Physics.ARCADE);
+
         game.add.sprite(game.width * 101/144, game.height * 5/8, "tuPuntaje");
         game.add.sprite(game.width * 1/7, game.height * 5/8, "puntajeMaquina");
 
@@ -76,7 +101,7 @@ playGame.prototype = {
         for (var i = 0; i < gameGlobal.turno; i++) {
             cartaTemporal = cartasJugadas[cartasJugadas.length-(2 * (i+1))]
             this.cartaMaquina[i] = game.add.sprite((game.width / 12) + (i * 150),
-                game.width / 8, "cards0");
+                game.height / 3, "cards0");
             this.cartaMaquina[i].anchor.set(0.5);
         	this.cartaMaquina[i].scale.set(gameOptions.cardScale);
             this.cartaMaquina[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
@@ -85,7 +110,7 @@ playGame.prototype = {
             cartaTemporal = cartasJugadas[cartasJugadas.length- (1 + (i*2))]
             console.log("Carta del jugador Temporal: "+ cartaTemporal + ", " + cartaTemporal%13)
             this.cartaJugador[i] = game.add.sprite((game.width - (game.width / 12)) - (i * 150),
-                game.width / 8, "cards0");
+                game.height / 3, "cards0");
             this.cartaJugador[i].anchor.set(0.5);
         	this.cartaJugador[i].scale.set(gameOptions.cardScale);
             this.cartaJugador[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
@@ -112,9 +137,14 @@ playGame.prototype = {
 		this.cardsInGame = [this.makeCard(0), this.makeCard(1)];                
         
         this.nextCardIndex = 2;
-        var tween = game.add.tween(this.cardsInGame[0]).to({
-            x: game.width / 2
-        }, 1000, Phaser.Easing.Cubic.Out, true);
+
+        var fondoCarta = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/12) + barajaSprite.height/2, "fondoCarta");
+        fondoCarta.anchor.set(0.5);
+        fondoCarta.scale.set(gameOptions.cardScale);
+        fondoCarta.angle += 5;        
+        
+        var tween = this.flipCard(fondoCarta, this.cardsInGame[0])
+
         tween.onComplete.add(function(){
             this.infoGroup.visible = true;
         }, this)
@@ -161,10 +191,14 @@ playGame.prototype = {
 		gameGlobal.turno += 1;
         
     },
+
     makeCard: function(cardIndex) {
-        var card = game.add.sprite(gameOptions.cardSheetWidth * gameOptions.cardScale / -2, game.height / 2, "cards0");
+        var card = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/12) + barajaSprite.height/2, "cards0");
+        card.visible = false;
         card.anchor.set(0.5);
         card.scale.set(gameOptions.cardScale);
+        //card.angle += 5;
+        
         var carta = this.deck[cardIndex];        
         var comprobador = cardIndex;
     	var ultima = cartasJugadas[cartasJugadas.length-1]
@@ -208,7 +242,7 @@ playGame.prototype = {
         cartasJugadas.push(carta);
         console.log(cartasJugadas)
         card.loadTexture("cards" + this.getCardTexture(carta));
-        card.frame = this.getCardFrame(carta);
+        card.frame = this.getCardFrame(carta);        
         return card;        
     },
     getCardTexture: function(cardValue){
@@ -222,7 +256,7 @@ playGame.prototype = {
         game.input.onDown.remove(this.beginSwipe, this);
         game.input.onUp.add(this.endSwipe, this);
     },
-    endSwipe: function(e) {
+    endSwipe: function(e) {    	
         game.input.onUp.remove(this.endSwipe, this);
         var swipeTime = e.timeUp - e.timeDown;
         var swipeDistance = Phaser.Point.subtract(e.position, e.positionDown);
@@ -230,6 +264,9 @@ playGame.prototype = {
         var swipeNormal = Phaser.Point.normalize(swipeDistance);
         if(swipeMagnitude > 20 && swipeTime < 1000 && Math.abs(swipeNormal.y) > 0.8) {
             if(swipeNormal.y > 0.8) {
+            	game.add.tween(boton).to({
+		            y: (game.height * 2 / 3)
+		        }, 1000, Phaser.Easing.Cubic.Out, true);
                 if (gameGlobal.turno >= gameGlobal.partidas-1) {        //Si esta en el ultimo turno
                     console.log("Entro a menor")
                     var cartaSalvavidas = this.makeWinnerCard(1, false);
@@ -239,6 +276,9 @@ playGame.prototype = {
                 this.handleSwipe(1);
             }
             if(swipeNormal.y < -0.8) {
+            	game.add.tween(boton).to({
+		            y: (game.height * 1 / 5)
+		        }, 1000, Phaser.Easing.Cubic.Out, true);
                 if (gameGlobal.turno >= gameGlobal.partidas -1) {        //Si esta en el ultimo turno
                     console.log("Entro a mayor")
                     var cartaSalvavidas = this.makeWinnerCard(1, true);
@@ -255,10 +295,18 @@ playGame.prototype = {
     	console.log("Empieza handleSwipe")
         var cardToMove = (this.nextCardIndex + 1) % 2;
         console.log("Carta a mover: "+cardToMove)
+        this.cardsInGame[cardToMove].visible = true;
         this.cardsInGame[cardToMove].y += dir * gameOptions.cardSheetHeight * gameOptions.cardScale * 1.1;
+        if (cardToMove == 1) {
+        	var tween = game.add.tween(this.cardsInGame[cardToMove]).to({
+	        	y: game.height * 1 / 2,
+	            x: game.width / 2
+	        }, 500, Phaser.Easing.Cubic.Out, true); 
+        }
         var tween = game.add.tween(this.cardsInGame[cardToMove]).to({
+        	y: game.height * 1 / 3,
             x: game.width / 2
-        }, 500, Phaser.Easing.Cubic.Out, true);
+        }, 500, Phaser.Easing.Cubic.Out, true);        
         tween.onComplete.add(function() {
             var newCard = cartasJugadas[cartasJugadas.length-1];
             var oldCard = cartasJugadas[cartasJugadas.length-2];
@@ -306,12 +354,14 @@ playGame.prototype = {
     	console.log("cardsInGame 1: " + this.cardsInGame[1])
     	var tween = game.add.tween(this.cardsInGame[0]).to({
             x: game.width / 12,
-            y: game.width / 8
+            y: game.height / 3
         }, 500, Phaser.Easing.Cubic.Out, true);
+        this.cardsInGame[0].scale.set(gameOptions.cardScale);
         var tween = game.add.tween(this.cardsInGame[1]).to({
             x: game.width - (game.width / 12),
-            y: game.width / 8
+            y: game.height / 3
         }, 500, Phaser.Easing.Cubic.Out, true);
+        this.cardsInGame[1].scale.set(gameOptions.cardScale);
         /*
         for(var i = 0; i < 2; i++){    	
 	        
@@ -343,7 +393,7 @@ playGame.prototype = {
     },
 
     makeWinnerCard: function(cardIndex, choice) {
-        var card = game.add.sprite(gameOptions.cardSheetWidth * gameOptions.cardScale / -2, game.height / 2, "cards0");
+        var card = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/12) + barajaSprite.height/2, "cards0");
         card.anchor.set(0.5);
         card.scale.set(gameOptions.cardScale);
         var carta = cartasJugadas[cartasJugadas.length-1];        
@@ -490,6 +540,68 @@ console.log("validacion de ultimo turno")
         }
 		console.log("ERROR-----------------")
         return 0;     
+    },
+
+
+    flipCard: function(card, cardFront) {
+
+    	card.isFlipping = true;
+    	card.scale.set(gameOptions.cardScale);
+    	cardFront.isFlipping = true;
+    	cardFront.scale.set(gameOptions.cardScale);
+    	cardFront.angle += 5;
+	    flipTween = game.add.tween(card.scale).to({
+	            x: 0,
+	            y: gameOptions.flipZoom
+	        }, gameOptions.flipSpeed / 2, Phaser.Easing.Linear.None);
+
+	        // once the card is flipped, we change its frame and call the second tween
+	        flipTween.onComplete.add(function(){
+	            backFlipTween.start();
+	        });
+
+	        // second tween: we complete the flip and lower the card
+	        backFlipTween = game.add.tween(card.scale).to({
+	            x: 1,
+	            y: 1
+	        }, gameOptions.flipSpeed / 2, Phaser.Easing.Linear.None);
+
+	        flipTween2 = game.add.tween(cardFront.scale).to({
+	            x: 0,
+	            y: gameOptions.flipZoom
+	        }, gameOptions.flipSpeed / 2, Phaser.Easing.Linear.None);
+
+	        flipTween.onComplete.add(function(){
+	        	cardFront.visible = true;
+	        	cardFront.angle -= 5;
+	            backFlipTween.start();
+	        });
+
+	        backFlipTween = game.add.tween(cardFront.scale).to({
+	            x: 1,
+	            y: 1
+	        }, gameOptions.flipSpeed / 2, Phaser.Easing.Linear.None);
+
+	        backFlipTween.onComplete.add(function(){
+	        	console.log("ESCALANDO")
+	        	
+	            card.isFlipping = false;
+	        });
+	        console.log("FLIP!! " + card)
+	        flipTween.start()
+	        flipTween2.start()
+
+	        game.add.tween(card).to({
+	        	y: game.height * 2 / 3,
+	            x: game.width / 2
+	        }, 1000, Phaser.Easing.Cubic.Out, true);	        
+	        
+
+	        return game.add.tween(cardFront).to({
+	        	y: game.height * 2 / 3,
+	            x: game.width / 2
+	        }, 1000, Phaser.Easing.Cubic.Out, true);
+
     },
 
     finalizar: function(e) {
