@@ -154,22 +154,23 @@ playGame.prototype = {
             this.finalizar(this);          
         }
         console.log(gameGlobal.turno)
-
+        /*
         var button3= game.add.button(game.width * 3/7, game.height * 1/25, 'button3');
         button3.scale.setTo(0.5,0.5);
         button3.inputEnabled= true;
+        button3.visible= false;
 
         var button5= game.add.button(game.width * 4/7.5, game.height * 1/25, 'button5');
         button5.scale.setTo(0.5,0.5);
         button5.inputEnabled= true;
-    
+        button5.visible= false;
         
         var mensaje3= game.add.text(game.width * 3/14, game.height /5, 'Usted tiene 3 intentos', { fontSize: '50px', fill: '#000' });
         var mensaje5= game.add.text(game.width * 3/14, game.height /5, 'Usted tiene 5 intentos', { fontSize: '50px', fill: '#000' });
         mensaje3.visible= false;
         mensaje5.visible= false;
 
-        
+        */
 
         this.playerScoreText = game.add.text(game.width * 28/32, game.height * 3/4, '' + gameGlobal.playerScore, { fontSize: '80px', fill: '#000' });
         this.machineScoreText = game.add.text(game.width / 8, game.height * 3/4, '' + gameGlobal.machineScore, { fontSize: '80px', fill: '#000' });
