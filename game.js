@@ -41,7 +41,20 @@ playGame.prototype = {
         game.load.spritesheet("indicaciones", "indicaciones1.png", 500, 184);
         game.load.image("barraLinea", "Barra_linea_celeste.png");
         game.load.image("barraLineaV", "Barra_linea_verde.png");
+        game.load.image("masCeleste", "Barra_mas_celeste.png");
+        game.load.image("masCelesteClaro", "Barra_mas_celesteclaro.png");
+        game.load.image("masVerde", "Barra_mas_verde.png");
+        game.load.image("masVerdeClaro", "Barra_mas_verdeclaro.png");
+        game.load.spritesheet("masCelesteSheet", "mas_Celeste.png", 48,0)
+        game.load.spritesheet("prueba", "Prueba.png", 158,0)
+
+        game.load.spritesheet("barraCelesteSheet", "Barra_Celeste_Sprite.png", 182,0)
+        game.load.spritesheet("barraVerdeSheet", "Barra_Verde_Sprite.png", 182,0)
+
+        game.load.image("masCelesteBrillo", "Barra_mas_brillo_celeste.png");
+        
         game.load.image("boton", "boton_celeste.png");
+        game.load.image("botonV", "boton_verde.png");
         game.load.spritesheet("swipe", "swipe.png", 80, 130);
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         game.scale.pageAlignHorizontally = true;
@@ -52,15 +65,26 @@ playGame.prototype = {
         game.load.spritesheet("button5", "button5.png", 302, 200);
         this.cartaMaquina = []
         this.cartaJugador = []
-        },
+    },
+
+    onLoop: function() {
+		if (masCelesteSheet.frame == 0)
+		{
+			masCelesteSheet.frame = 1;
+		}
+		else
+		{
+			masCelesteSheet.frame = 0;
+		}
+	},
         
     create: function() {
 
         game.add.tileSprite(0, 0, Math.floor(gameOptions.gameWidth/2) *3.5, Math.floor(gameOptions.gameHeight/2) *2, 'background');
         if (gameGlobal.turno == 0) {
-        	barajaSprite = game.add.sprite(game.width * 1/5, -700, "baraja");
+        	barajaSprite = game.add.sprite(game.width * 1/6, -700, "baraja");
 
-        	var tween = game.add.tween(barajaSprite).to({
+        	var tweenBaraja = game.add.tween(barajaSprite).to({
 	            y: game.height / 12
 	        }, 1000, Phaser.Easing.Cubic.Out, true);
 
@@ -68,11 +92,60 @@ playGame.prototype = {
         	barajaSprite = game.add.sprite(game.width * 1/6, game.height * 1/12, "baraja");
         }
 
-        barraLineaV = game.add.sprite(game.width * 2/3, game.height * 1/4, "barraLineaV");
-        barraLinea = game.add.sprite(game.width * 2/3, game.height * 1/4, "barraLinea");
-        boton = game.add.sprite((game.width * 2/3) - (barraLinea.width * 5/6) , game.height * 3/7, "boton");
+        //barraLineaV = game.add.sprite(game.width * 2/3, game.height * 1/4, "barraLineaV");
+        //barraLinea = game.add.sprite(game.width * 2/3, game.height * 1/4, "barraLinea");
+        //masCeleste = game.add.sprite(game.width * 2/3 + (barraLinea.width * 1/6), game.height * 1/4 + (barraLinea.height * 1/20), "masCeleste");
+        //masCelesteClaro = game.add.sprite(game.width * 2/3 + (barraLinea.width * 1/6), game.height * 1/4 + (barraLinea.height * 1/20), "masCelesteClaro");
+        
 
-        game.physics.enable(boton, Phaser.Physics.ARCADE);
+        //masCelesteBrillo = game.add.sprite(game.width * 2/3 - (barraLinea.width * 7/12), game.height * 1/4 - (barraLinea.height * 1/30), "masCelesteBrillo");
+        //prueba = game.add.sprite(game.width * 2/3 + (barraLinea.width * 1/6), game.height * 1/4 + (barraLinea.height * 1/20), "masCelesteSheet");
+
+        barraVerdeSheet = game.add.sprite(game.width * 2/3 , game.height * 1/6 , "barraVerdeSheet");
+        var tween = game.add.tween(barraVerdeSheet).to({
+        }, 10, Phaser.Easing.Linear.None, true).loop(true);
+
+        tween.onLoop.add(function() {
+			if (barraVerdeSheet.frame == 2) {
+				barraVerdeSheet.frame = 0;
+			}
+			else {
+				barraVerdeSheet.frame++;
+			}
+		}, this);
+
+
+        barraCelesteSheet = game.add.sprite(game.width * 2/3 , game.height * 1/6 , "barraCelesteSheet");
+        var tween = game.add.tween(barraCelesteSheet).to({
+        }, 10, Phaser.Easing.Linear.None, true).loop(true);
+
+        tween.onLoop.add(function() {
+			if (barraCelesteSheet.frame == 2) {
+				barraCelesteSheet.frame = 0;
+			}
+			else {
+				barraCelesteSheet.frame++;
+			}
+		}, this);
+
+
+        masCelesteSheet = game.add.sprite(game.width * 257/384, game.height * 9/48, "prueba");
+        var tween = game.add.tween(masCelesteSheet).to({
+        }, 5, Phaser.Easing.Linear.None, true).loop(true);
+
+        tween.onLoop.add(function() {
+			if (masCelesteSheet.frame == 2) {
+				masCelesteSheet.frame = 0;
+			}
+			else {
+				masCelesteSheet.frame++;
+			}
+		}, this);
+
+        botonV = game.add.sprite((game.width * 2/3) , game.height * 3/8, "botonV");
+        boton = game.add.sprite((game.width * 2/3), game.height * 3/8, "boton");
+
+        game.physics.enable(botonV, Phaser.Physics.ARCADE);
 
         game.add.sprite(game.width * 115/144, game.height * 5/8, "tuPuntaje");
         game.add.sprite(game.width * 1/22, game.height * 5/8, "puntajeMaquina");
@@ -141,21 +214,22 @@ playGame.prototype = {
         
         this.nextCardIndex = 2;
 
-               
+
         
         var tween = this.flipCard(this, this.cardsInGame[0])
+        
 
         tween.onComplete.add(function(){
-            this.infoGroup.visible = true
-;        }, this)
-        var infoUp = game.add.sprite(game.width / 1.47, game.height / 5.8, "indicaciones");
+            this.infoGroup.visible = true;
+        }, this)
+        var infoUp = game.add.sprite(game.width * 7 / 10, game.height / 8, "indicaciones");
         infoUp.anchor.set(0.5);
         this.infoGroup.add(infoUp);
-        var infoDown = game.add.sprite(game.width / 1.47, game.height * 3.4 / 4, "indicaciones");
+        var infoDown = game.add.sprite(game.width * 7 / 10, game.height * 7 / 8, "indicaciones");
         infoDown.anchor.set(0.5);
         infoDown.frame = 1;
         this.infoGroup.add(infoDown);
-        swipeUp = game.add.sprite(game.width / 1.4, game.height / 2 - gameOptions.cardSheetHeight / 4 - 20, "swipe");
+        swipeUp = game.add.sprite(game.width / 1.3, game.height / 2 - gameOptions.cardSheetHeight / 4 - 20, "swipe");
         var swipeUpTween = game.add.tween(swipeUp).to({
             y: swipeUp.y - 180
         }, 1000, Phaser.Easing.Linear.None, true, 0, -1);     
@@ -264,8 +338,9 @@ playGame.prototype = {
         var swipeNormal = Phaser.Point.normalize(swipeDistance);
         if(swipeMagnitude > 20 && swipeTime < 1000 && Math.abs(swipeNormal.y) > 0.8) {
             if(swipeNormal.y > 0.8) {
-            	barraLinea.visible= false;
-                game.add.tween(boton).to({
+            	barraCelesteSheet.visible= false;
+            	boton.visible= false;
+                game.add.tween(botonV).to({
 		            y: (game.height * 2 / 3)
 		        }, 1000, Phaser.Easing.Cubic.Out, true);
                 if (gameGlobal.turno >= gameGlobal.partidas-1) {        //Si esta en el ultimo turno
@@ -277,8 +352,9 @@ playGame.prototype = {
                 this.handleSwipe(1);
             }
             if(swipeNormal.y < -0.8) {
-                barraLinea.visible= false;
-            	game.add.tween(boton).to({
+                barraCelesteSheet.visible= false;
+                boton.visible= false;
+            	game.add.tween(botonV).to({
 		            y: (game.height * 1 / 5)
 		        }, 1000, Phaser.Easing.Cubic.Out, true);
                 if (gameGlobal.turno >= gameGlobal.partidas -1) {        //Si esta en el ultimo turno
