@@ -37,9 +37,10 @@ playGame.prototype = {
         
         game.load.image("fondoCarta", "carta_imajen_fondo.png");
         game.load.image("baraja", "baraja-poker-01.png");
-        game.load.spritesheet("indicaciones", "indicaciones.png", 500, 184);
-        game.load.spritesheet("indicaciones", "indicaciones.png", 500, 184);
+        game.load.spritesheet("indicaciones", "indicaciones1.png", 500, 184);
+        game.load.spritesheet("indicaciones", "indicaciones1.png", 500, 184);
         game.load.image("barraLinea", "Barra_linea_celeste.png");
+        game.load.image("barraLineaV", "Barra_linea_verde.png");
         game.load.image("boton", "boton_celeste.png");
         game.load.spritesheet("swipe", "swipe.png", 80, 130);
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -55,9 +56,9 @@ playGame.prototype = {
         
     create: function() {
 
-        game.add.tileSprite(0, 0, Math.floor(gameOptions.gameWidth/2) *2, Math.floor(gameOptions.gameHeight/2) *2, 'background');
+        game.add.tileSprite(0, 0, Math.floor(gameOptions.gameWidth/2) *3.5, Math.floor(gameOptions.gameHeight/2) *2, 'background');
         if (gameGlobal.turno == 0) {
-        	barajaSprite = game.add.sprite(game.width * 1/6, -700, "baraja");
+        	barajaSprite = game.add.sprite(game.width * 1/5, -700, "baraja");
 
         	var tween = game.add.tween(barajaSprite).to({
 	            y: game.height / 12
@@ -67,13 +68,14 @@ playGame.prototype = {
         	barajaSprite = game.add.sprite(game.width * 1/6, game.height * 1/12, "baraja");
         }
 
+        barraLineaV = game.add.sprite(game.width * 2/3, game.height * 1/4, "barraLineaV");
         barraLinea = game.add.sprite(game.width * 2/3, game.height * 1/4, "barraLinea");
         boton = game.add.sprite((game.width * 2/3) - (barraLinea.width * 5/6) , game.height * 3/7, "boton");
 
         game.physics.enable(boton, Phaser.Physics.ARCADE);
 
-        game.add.sprite(game.width * 101/144, game.height * 5/8, "tuPuntaje");
-        game.add.sprite(game.width * 1/7, game.height * 5/8, "puntajeMaquina");
+        game.add.sprite(game.width * 115/144, game.height * 5/8, "tuPuntaje");
+        game.add.sprite(game.width * 1/22, game.height * 5/8, "puntajeMaquina");
 
         if (this.check()) {            
             this.finalizar(this);          
@@ -96,8 +98,8 @@ playGame.prototype = {
 
         
 
-        this.playerScoreText = game.add.text(game.width * 25/32, game.height * 3/4, '' + gameGlobal.playerScore, { fontSize: '80px', fill: '#000' });
-        this.machineScoreText = game.add.text(game.width / 4.5, game.height * 3/4, '' + gameGlobal.machineScore, { fontSize: '80px', fill: '#000' });
+        this.playerScoreText = game.add.text(game.width * 28/32, game.height * 3/4, '' + gameGlobal.playerScore, { fontSize: '80px', fill: '#000' });
+        this.machineScoreText = game.add.text(game.width / 8, game.height * 3/4, '' + gameGlobal.machineScore, { fontSize: '80px', fill: '#000' });
 
         for (var i = 0; i < gameGlobal.turno; i++) {
             cartaTemporal = cartasJugadas[cartasJugadas.length-(2 * (i+1))]
@@ -144,22 +146,22 @@ playGame.prototype = {
         var tween = this.flipCard(this, this.cardsInGame[0])
 
         tween.onComplete.add(function(){
-            this.infoGroup.visible = true;
-        }, this)
-        var infoUp = game.add.sprite(game.width / 2, game.height / 4, "indicaciones");
+            this.infoGroup.visible = true
+;        }, this)
+        var infoUp = game.add.sprite(game.width / 1.47, game.height / 5.8, "indicaciones");
         infoUp.anchor.set(0.5);
         this.infoGroup.add(infoUp);
-        var infoDown = game.add.sprite(game.width / 2, game.height * 3 / 4, "indicaciones");
+        var infoDown = game.add.sprite(game.width / 1.47, game.height * 3.4 / 4, "indicaciones");
         infoDown.anchor.set(0.5);
         infoDown.frame = 1;
         this.infoGroup.add(infoDown);
-        swipeUp = game.add.sprite(game.width / 1.62, game.height / 2 - gameOptions.cardSheetHeight / 4 - 20, "swipe");
+        swipeUp = game.add.sprite(game.width / 1.4, game.height / 2 - gameOptions.cardSheetHeight / 4 - 20, "swipe");
         var swipeUpTween = game.add.tween(swipeUp).to({
             y: swipeUp.y - 180
         }, 1000, Phaser.Easing.Linear.None, true, 0, -1);     
         swipeUp.anchor.set(0.5);   
         this.infoGroup.add(swipeUp);
-        var swipeDown = game.add.sprite(game.width / 2.6, game.height / 2 + gameOptions.cardSheetHeight / 4 + 20, "swipe");
+        var swipeDown = game.add.sprite(game.width / 1.55, game.height / 2 + gameOptions.cardSheetHeight / 4 + 20, "swipe");
         swipeDown.angle = -180;
         swipeDown.frame = 1;
         var swipeDownTween = game.add.tween(swipeDown).to({
@@ -262,7 +264,8 @@ playGame.prototype = {
         var swipeNormal = Phaser.Point.normalize(swipeDistance);
         if(swipeMagnitude > 20 && swipeTime < 1000 && Math.abs(swipeNormal.y) > 0.8) {
             if(swipeNormal.y > 0.8) {
-            	game.add.tween(boton).to({
+            	barraLinea.visible= false;
+                game.add.tween(boton).to({
 		            y: (game.height * 2 / 3)
 		        }, 1000, Phaser.Easing.Cubic.Out, true);
                 if (gameGlobal.turno >= gameGlobal.partidas-1) {        //Si esta en el ultimo turno
@@ -274,6 +277,7 @@ playGame.prototype = {
                 this.handleSwipe(1);
             }
             if(swipeNormal.y < -0.8) {
+                barraLinea.visible= false;
             	game.add.tween(boton).to({
 		            y: (game.height * 1 / 5)
 		        }, 1000, Phaser.Easing.Cubic.Out, true);
