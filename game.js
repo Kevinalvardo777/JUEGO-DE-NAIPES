@@ -67,19 +67,7 @@ playGame.prototype = {
         this.cartaJugador = []
     },
 
-    onLoop: function() {
-		if (masCelesteSheet.frame == 0)
-		{
-			masCelesteSheet.frame = 1;
-		}
-		else
-		{
-			masCelesteSheet.frame = 0;
-		}
-	},
-        
     create: function() {
-
         game.add.tileSprite(0, 0, Math.floor(gameOptions.gameWidth/2) *3.5, Math.floor(gameOptions.gameHeight/2) *2, 'background');
         if (gameGlobal.turno == 0) {
         	barajaSprite = game.add.sprite(game.width * 1/6, -700, "baraja");
@@ -142,58 +130,57 @@ playGame.prototype = {
 			}
 		}, this);
 
-        botonV = game.add.sprite((game.width * 2/3) , game.height * 3/8, "botonV");
-        boton = game.add.sprite((game.width * 2/3), game.height * 3/8, "boton");
+        botonV = game.add.sprite((game.width * 255/384) , game.height * 3/8, "botonV");
+        boton = game.add.sprite((game.width * 255/384), game.height * 3/8, "boton");
 
         game.physics.enable(botonV, Phaser.Physics.ARCADE);
-
-        game.add.sprite(game.width * 115/144, game.height * 5/8, "tuPuntaje");
-        game.add.sprite(game.width * 1/22, game.height * 5/8, "puntajeMaquina");
+        
+        puntajeM = game.add.sprite(game.width / 50, game.height / 12, "puntajeMaquina");
+        puntajeJ = game.add.sprite(game.width - (game.width / 50) - (puntajeM.width), game.height / 12, "tuPuntaje");
 
         if (this.check()) {            
             this.finalizar(this);          
         }
         console.log(gameGlobal.turno)
-        /*
+
         var button3= game.add.button(game.width * 3/7, game.height * 1/25, 'button3');
         button3.scale.setTo(0.5,0.5);
         button3.inputEnabled= true;
-        button3.visible= false;
 
         var button5= game.add.button(game.width * 4/7.5, game.height * 1/25, 'button5');
         button5.scale.setTo(0.5,0.5);
         button5.inputEnabled= true;
-        button5.visible= false;
         
         var mensaje3= game.add.text(game.width * 3/14, game.height /5, 'Usted tiene 3 intentos', { fontSize: '50px', fill: '#000' });
         var mensaje5= game.add.text(game.width * 3/14, game.height /5, 'Usted tiene 5 intentos', { fontSize: '50px', fill: '#000' });
         mensaje3.visible= false;
         mensaje5.visible= false;
+        
 
-        */
+        this.playerScoreText = game.add.text(game.width * 4/4.5, game.height * 5 / 24, '' + gameGlobal.playerScore, { fontSize: '80px', fill: '#000' });
+        this.machineScoreText = game.add.text((game.width / 50) + puntajeM.width/2, game.height * 5 / 24, '' + gameGlobal.machineScore, { fontSize: '80px', fill: '#000' });
 
-        this.playerScoreText = game.add.text(game.width * 28/32, game.height * 3/4, '' + gameGlobal.playerScore, { fontSize: '80px', fill: '#000' });
-        this.machineScoreText = game.add.text(game.width / 8, game.height * 3/4, '' + gameGlobal.machineScore, { fontSize: '80px', fill: '#000' });
-
-        for (var i = 0; i < gameGlobal.turno; i++) {
+    	for (var i = 0; i < gameGlobal.turno; i++) {
             cartaTemporal = cartasJugadas[cartasJugadas.length-(2 * (i+1))]
-            this.cartaMaquina[i] = game.add.sprite((game.width / 12) + (i * 130),
-                game.height/ 3 + (i*40), "cards0");
+            this.cartaMaquina[i] = game.add.sprite((game.width / 12) + (i * 150),
+                (game.height * 4/ 5) + ((i) * 25), "cards0");
             this.cartaMaquina[i].anchor.set(0.5);
         	this.cartaMaquina[i].scale.set(gameOptions.cardScale);
             this.cartaMaquina[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
-            this.cartaMaquina[i].frame = this.getCardFrame(cartaTemporal);
+            this.cartaMaquina[i].frame = this.getCardFrame(cartaTemporal);	                      
+            
+            this.cartaMaquina[i].angle += -45 + (i*35);
 
             cartaTemporal = cartasJugadas[cartasJugadas.length- (1 + (i*2))]
             console.log("Carta del jugador Temporal: "+ cartaTemporal + ", " + cartaTemporal%13)
-            this.cartaJugador[i] = game.add.sprite((game.width - (game.width / 12)) - (i * 130),
-                game.height/ 3 +(i*40), "cards0");
+            this.cartaJugador[i] = game.add.sprite((game.width - (game.width / 12)) - (i * 150),
+                game.height * 4/ 5 + ((i) * 25), "cards0");
             this.cartaJugador[i].anchor.set(0.5);
         	this.cartaJugador[i].scale.set(gameOptions.cardScale);
             this.cartaJugador[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
             this.cartaJugador[i].frame = this.getCardFrame(cartaTemporal);
+            this.cartaJugador[i].angle += 45 - (i*35);
         }
-
         
 
         var textoTusNaipes = "TUS NAIPES";
@@ -201,8 +188,8 @@ playGame.prototype = {
 
         var textoNaipesBaraja = "NAIPES DE BARAJA";
         
-        game.add.text(game.width * 4/4.5, game.height / 12, textoTusNaipes, style);
-        game.add.text(game.width / 50, game.height / 12, textoNaipesBaraja, style);
+        game.add.text(game.width * 4/4.5, game.height / 2, textoTusNaipes, style);
+        game.add.text(game.width / 50, game.height / 2, textoNaipesBaraja, style);
         
 
         this.infoGroup = game.add.group();
@@ -342,7 +329,7 @@ playGame.prototype = {
             	barraCelesteSheet.visible= false;
             	boton.visible= false;
                 game.add.tween(botonV).to({
-		            y: (game.height * 2 / 3)
+		            y: (game.height * 125/192)
 		        }, 1000, Phaser.Easing.Cubic.Out, true);
                 if (gameGlobal.turno >= gameGlobal.partidas-1) {        //Si esta en el ultimo turno
                     console.log("Entro a menor")
@@ -356,7 +343,7 @@ playGame.prototype = {
                 barraCelesteSheet.visible= false;
                 boton.visible= false;
             	game.add.tween(botonV).to({
-		            y: (game.height * 1 / 5)
+		            y: (game.height * 1 / 6)
 		        }, 1000, Phaser.Easing.Cubic.Out, true);
                 if (gameGlobal.turno >= gameGlobal.partidas -1) {        //Si esta en el ultimo turno
                     console.log("Entro a mayor")
@@ -429,29 +416,41 @@ playGame.prototype = {
         }, this)
     },
     fadeCards: function(){
-    	console.log("cardsInGame 0: " + this.cardsInGame[0])
-    	console.log("cardsInGame 1: " + this.cardsInGame[1])
+
+    	for (var i = 1; i < gameGlobal.turno; i++) {
+			game.world.bringToTop(this.cartaMaquina[i-1]);
+			game.world.bringToTop(this.cartaJugador[i-1]);
+            var tween = game.add.tween(this.cartaMaquina[i-1]).to({
+	            x: (game.width / 12) + (i * 150),
+	            y: (game.height * 4/ 5) + ((i) * 25),
+	            angle: -45 + (i*35)
+	        }, 500, Phaser.Easing.Cubic.Out, true);
+	        var tween = game.add.tween(this.cartaJugador[i-1]).to({
+	            x: game.width - (game.width / 12) - (i * 150),
+	            y: (game.height * 4/ 5) + ((i) * 25),
+	            angle: +45 - (i*35)
+	        }, 500, Phaser.Easing.Cubic.Out, true); 
+        }
+
     	var tween = game.add.tween(this.cardsInGame[0]).to({
             x: game.width / 12,
-            y: game.height / 3
-        }, 500, Phaser.Easing.Cubic.Out, true);
+            y: (game.height * 4/ 5),
+            angle: -45
+        }, 500, Phaser.Easing.Cubic.Out, true);  
+
         this.cardsInGame[0].scale.set(gameOptions.cardScale);
         var tween = game.add.tween(this.cardsInGame[1]).to({
             x: game.width - (game.width / 12),
-            y: game.height / 3
+            y: game.height * 4/ 5,
+            angle: 45
         }, 500, Phaser.Easing.Cubic.Out, true);
         this.cardsInGame[1].scale.set(gameOptions.cardScale);
-        /*
-        for(var i = 0; i < 2; i++){    	
-	        
-            var fadeTween = game.add.tween(this.cardsInGame[i]).to({
-                alpha: 0
-            }, 500, Phaser.Easing.Linear.None, true);
-            
-        }*/
+        
+        
         game.time.events.add(Phaser.Timer.SECOND, function(){
             game.state.start("PlayGame");    
         }, this)  
+
     },
 
 
