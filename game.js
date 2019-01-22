@@ -47,6 +47,8 @@ playGame.prototype = {
         game.load.image("masVerdeClaro", "Barra_mas_verdeclaro.png");
         game.load.spritesheet("masCelesteSheet", "mas_Celeste.png", 48,0)
         game.load.spritesheet("prueba", "Prueba.png", 158,0)
+        game.load.spritesheet("cartaFiloVerde", "brillo_verde_cartafilo.png", 9805 / 28,0)
+        
 
         game.load.spritesheet("barraCelesteSheet", "Barra_Celeste_Sprite.png", 182,0)
         game.load.spritesheet("barraVerdeSheet", "Barra_Verde_Sprite.png", 182,0)
@@ -70,7 +72,8 @@ playGame.prototype = {
     create: function() {
         game.add.tileSprite(0, 0, Math.floor(gameOptions.gameWidth/2) *3.5, Math.floor(gameOptions.gameHeight/2) *2, 'background');
         if (gameGlobal.turno == 0) {
-        	barajaSprite = game.add.sprite(game.width * 1/6, -700, "baraja");
+        	barajaSprite = game.add.sprite(game.width * 1/6, 0, "baraja");
+        	barajaSprite.y = barajaSprite.height * -2;
 
         	var tweenBaraja = game.add.tween(barajaSprite).to({
 	            y: game.height / 12
@@ -91,7 +94,7 @@ playGame.prototype = {
 
         barraVerdeSheet = game.add.sprite(game.width * 2/3 , game.height * 1/6 , "barraVerdeSheet");
         var tween = game.add.tween(barraVerdeSheet).to({
-        }, 10, Phaser.Easing.Linear.None, true).loop(true);
+        }, 1, Phaser.Easing.Linear.None, true).loop(true);
 
         tween.onLoop.add(function() {
 			if (barraVerdeSheet.frame == 2) {
@@ -101,8 +104,21 @@ playGame.prototype = {
 				barraVerdeSheet.frame++;
 			}
 		}, this);
+        /*
+		cartaFiloVerde = game.add.sprite(game.width * 1/2 , game.height * 1/2 , "cartaFiloVerde");
+        var tween = game.add.tween(cartaFiloVerde).to({
+        }, 10, Phaser.Easing.Linear.None, true).loop(true);
 
+        tween.onLoop.add(function() {
+			if (cartaFiloVerde.frame == 27) {
+				cartaFiloVerde.frame = 0;
+			}
+			else {
+				cartaFiloVerde.frame++;
+			}
+		}, this);
 
+		*/
         barraCelesteSheet = game.add.sprite(game.width * 2/3 , game.height * 1/6 , "barraCelesteSheet");
         var tween = game.add.tween(barraCelesteSheet).to({
         }, 10, Phaser.Easing.Linear.None, true).loop(true);
@@ -162,24 +178,31 @@ playGame.prototype = {
 
     	for (var i = 0; i < gameGlobal.turno; i++) {
             cartaTemporal = cartasJugadas[cartasJugadas.length-(2 * (i+1))]
-            this.cartaMaquina[i] = game.add.sprite((game.width / 12) + (i * 150),
-                (game.height * 4/ 5) + ((i) * 25), "cards0");
+            this.cartaMaquina[i] = game.add.sprite(game.width / 12, game.height * 4/ 5, "cards0");
             this.cartaMaquina[i].anchor.set(0.5);
-        	this.cartaMaquina[i].scale.set(gameOptions.cardScale);
+            this.cartaMaquina[i].scale.set(gameOptions.cardScale);
             this.cartaMaquina[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
-            this.cartaMaquina[i].frame = this.getCardFrame(cartaTemporal);	                      
+            this.cartaMaquina[i].frame = this.getCardFrame(cartaTemporal);	
+
+            this.cartaMaquina[i].x = (game.width / 12) + (i * this.cartaMaquina[i].width * 0.6)
+            this.cartaMaquina[i].y = (game.height * 4/ 5) + (i * this.cartaMaquina[i].height/16)
             
-            this.cartaMaquina[i].angle += -45 + (i*35);
+        	                      
+            
+            this.cartaMaquina[i].angle += -45 + (i * this.cartaMaquina[i].width * 0.15);
 
             cartaTemporal = cartasJugadas[cartasJugadas.length- (1 + (i*2))]
             console.log("Carta del jugador Temporal: "+ cartaTemporal + ", " + cartaTemporal%13)
-            this.cartaJugador[i] = game.add.sprite((game.width - (game.width / 12)) - (i * 150),
-                game.height * 4/ 5 + ((i) * 25), "cards0");
+            this.cartaJugador[i] = game.add.sprite(game.width - (game.width / 12), game.height * 4/ 5, "cards0");
             this.cartaJugador[i].anchor.set(0.5);
-        	this.cartaJugador[i].scale.set(gameOptions.cardScale);
+            this.cartaJugador[i].scale.set(gameOptions.cardScale);
             this.cartaJugador[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
             this.cartaJugador[i].frame = this.getCardFrame(cartaTemporal);
-            this.cartaJugador[i].angle += 45 - (i*35);
+            this.cartaJugador[i].x = game.width - (game.width / 12) - (i * this.cartaJugador[i].width * 0.6)
+            this.cartaJugador[i].y = (game.height * 4/ 5) + (i * this.cartaJugador[i].height/16)
+            
+        	
+            this.cartaJugador[i].angle += 45 - (i * this.cartaJugador[i].width * 0.15);
         }
         
 
@@ -219,7 +242,7 @@ playGame.prototype = {
         this.infoGroup.add(infoDown);
         swipeUp = game.add.sprite(game.width / 1.3, game.height / 2 - gameOptions.cardSheetHeight / 4 - 20, "swipe");
         var swipeUpTween = game.add.tween(swipeUp).to({
-            y: swipeUp.y - 180
+            y: swipeUp.y - swipeUp.height*2
         }, 1000, Phaser.Easing.Linear.None, true, 0, -1);     
         swipeUp.anchor.set(0.5);   
         this.infoGroup.add(swipeUp);
@@ -227,7 +250,7 @@ playGame.prototype = {
         swipeDown.angle = -180;
         swipeDown.frame = 1;
         var swipeDownTween = game.add.tween(swipeDown).to({
-            y: swipeDown.y + 180
+            y: swipeDown.y + swipeUp.height*2
         }, 1000, Phaser.Easing.Linear.None, true, 0, -1);     
         swipeDown.anchor.set(0.5); 
         this.infoGroup.add(swipeDown);
@@ -324,7 +347,7 @@ playGame.prototype = {
         var swipeDistance = Phaser.Point.subtract(e.position, e.positionDown);
         var swipeMagnitude = swipeDistance.getMagnitude();
         var swipeNormal = Phaser.Point.normalize(swipeDistance);
-        if(swipeMagnitude > 20 && swipeTime < 1000 && Math.abs(swipeNormal.y) > 0.8) {
+        if(swipeMagnitude > 25 && swipeTime < 1000 && Math.abs(swipeNormal.y) > 0.8) {
             if(swipeNormal.y > 0.8) {
             	barraCelesteSheet.visible= false;
             	boton.visible= false;
@@ -415,20 +438,21 @@ playGame.prototype = {
             this.infoGroup.visible = true;
         }, this)
     },
+
     fadeCards: function(){
 
     	for (var i = 1; i < gameGlobal.turno; i++) {
 			game.world.bringToTop(this.cartaMaquina[i-1]);
 			game.world.bringToTop(this.cartaJugador[i-1]);
             var tween = game.add.tween(this.cartaMaquina[i-1]).to({
-	            x: (game.width / 12) + (i * 150),
-	            y: (game.height * 4/ 5) + ((i) * 25),
-	            angle: -45 + (i*35)
+	            x: (game.width / 12) + (i * this.cartaMaquina[i-1].width * 0.6),
+	            y: (game.height * 4/ 5) + (i * this.cartaMaquina[i-1].height/16),
+	            angle: -45 + (i * this.cartaMaquina[i-1].width * 0.15)
 	        }, 500, Phaser.Easing.Cubic.Out, true);
 	        var tween = game.add.tween(this.cartaJugador[i-1]).to({
-	            x: game.width - (game.width / 12) - (i * 150),
-	            y: (game.height * 4/ 5) + ((i) * 25),
-	            angle: +45 - (i*35)
+	            x: game.width - (game.width / 12) - (i * this.cartaJugador[i-1].width * 0.6),
+	            y: (game.height * 4/ 5) + (i * this.cartaJugador[i-1].height/16),
+	            angle: +45 - (i * this.cartaJugador[i-1].width * 0.15)
 	        }, 500, Phaser.Easing.Cubic.Out, true); 
         }
 
