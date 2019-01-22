@@ -13,7 +13,7 @@ var gameGlobal = {
     playerScore: 0,
     machineScore: 0,
     turno: 0, 
-    partidas: 5,
+    partidas: 3,
     ganador: false
 }
 var cartasJugadas = [];
@@ -521,10 +521,7 @@ playGame.prototype = {
             }        
         }*/
 //Que pierda si ganador = false
-
-/*** CONDICIONES PARA BOTON3 ****/
-
-/*console.log("validacion de ultimo turno")
+console.log("validacion de ultimo turno")
         if (gameGlobal.turno == gameGlobal.partidas) {    //Si es el ultimo turno
             console.log("Ultimo turno")
             if (comprobador == 1) {                         //Si se esta sacando la segunda carta
@@ -635,18 +632,9 @@ playGame.prototype = {
                 }
                 
             }
+        }
 
-            console.log("Carta Salvavidas" + carta % 13)
-            cartasJugadas[cartasJugadas.length-1] = carta;
-            console.log(cartasJugadas)
-            card.loadTexture("cards" + this.getCardTexture(carta));
-            card.frame = this.getCardFrame(carta);
-            return card; 
-        }*/
-
-        /*** CONDICIONES PARA BOTON 3 ***/
-
-        /**** CONDICIONES BOTON 5 ***/
+            /**** CONDICIONES BOTON 5 ***/
 
 console.log("validacion de ultimo turno")
         if (gameGlobal.turno == gameGlobal.partidas) {    //Si es el ultimo turno
@@ -698,7 +686,7 @@ console.log("validacion de ultimo turno")
                 }
             }
 
-            
+
             console.log("Carta Salvavidas" + carta % 13)
             cartasJugadas[cartasJugadas.length-1] = carta;
             console.log(cartasJugadas)
@@ -736,7 +724,7 @@ console.log("validacion de ultimo turno")
                             cartaM = carta % 13;
                         }
                     }
-                
+
                 } else if(gameGlobal.playerScore==1 && gameGlobal.machineScore==2){
                     if  (choice) {                           //Si escogio mayor
                         console.log("Escogio mayor")
@@ -755,10 +743,11 @@ console.log("validacion de ultimo turno")
                             cartaM = carta % 13;
                         }
                     }
-                
+
                 }
-                
+
             }
+
 
             console.log("Carta Salvavidas" + carta % 13)
             cartasJugadas[cartasJugadas.length-1] = carta;
@@ -768,7 +757,6 @@ console.log("validacion de ultimo turno")
             return card; 
         }
 
-         //Para antepenultimo turno cuando van 1-1
         console.log("validacion de antepenultimo turno")
 
         if (gameGlobal.turno == gameGlobal.partidas - 2) {    //Si es el antepenultimo turno
@@ -795,7 +783,7 @@ console.log("validacion de ultimo turno")
                             cartaM = carta % 13;
                         }
                     }
-                
+
                 } else if(gameGlobal.playerScore==0 && gameGlobal.machineScore==2){
                     if  (choice) {                           //Si escogio mayor
                         console.log("Escogio mayor")
@@ -814,9 +802,9 @@ console.log("validacion de ultimo turno")
                             cartaM = carta % 13;
                         }
                     }
-                
+
                 }
-                
+
             }
 
             console.log("Carta Salvavidas" + carta % 13)
@@ -831,8 +819,6 @@ console.log("validacion de ultimo turno")
 
             console.log("ERROR-----------------")
         return 0;     
-
-
     },
 
 
