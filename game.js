@@ -13,7 +13,7 @@ var gameGlobal = {
     playerScore: 0,
     machineScore: 0,
     turno: 0, 
-    partidas: 3,
+    partidas: 5,
     ganador: false
 }
 var cartasJugadas = [];
@@ -497,7 +497,10 @@ playGame.prototype = {
             }        
         }*/
 //Que pierda si ganador = false
-console.log("validacion de ultimo turno")
+
+/*** CONDICIONES PARA BOTON3 ****/
+
+/*console.log("validacion de ultimo turno")
         if (gameGlobal.turno == gameGlobal.partidas) {    //Si es el ultimo turno
             console.log("Ultimo turno")
             if (comprobador == 1) {                         //Si se esta sacando la segunda carta
@@ -615,9 +618,197 @@ console.log("validacion de ultimo turno")
             card.loadTexture("cards" + this.getCardTexture(carta));
             card.frame = this.getCardFrame(carta);
             return card; 
+        }*/
+
+        /*** CONDICIONES PARA BOTON 3 ***/
+
+        /**** CONDICIONES BOTON 5 ***/
+
+console.log("validacion de ultimo turno")
+        if (gameGlobal.turno == gameGlobal.partidas) {    //Si es el ultimo turno
+            console.log("Ultimo turno")
+            if (comprobador == 1) {                         //Si se esta sacando la segunda carta
+                console.log("Ultima carta")
+                if (gameGlobal.ganador) {                   //Si es ganador
+                    console.log("Es ganador")
+                    cartaM = carta % 13
+                    ultimaM = ultima % 13
+                    if (choice) {                           //Si escogio mayor
+                        console.log("Escogio mayor")
+                        while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    } else {                                //Si escogio menor
+                        console.log("Escogio menor")
+                        while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    }
+                } else {
+                    console.log("Es perdedor")
+                    cartaM = carta % 13
+                    ultimaM = ultima % 13
+                    if (choice) {                           //Si escogio mayor
+                        console.log("Escogio mayor")
+                        while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    } else {                                //Si escogio menor
+                        console.log("Escogio menor")                        
+                        while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    }
+                }
+            }
+
+            
+            console.log("Carta Salvavidas" + carta % 13)
+            cartasJugadas[cartasJugadas.length-1] = carta;
+            console.log(cartasJugadas)
+            card.loadTexture("cards" + this.getCardTexture(carta));
+            card.frame = this.getCardFrame(carta);
+            return card;  
+
+
         }
-		console.log("ERROR-----------------")
+
+        //Para penultimo turno 
+        console.log("validacion de penultimo turno")
+
+        if (gameGlobal.turno == gameGlobal.partidas - 1) {    //Si es el penultimo turno
+            console.log("penultimo turno")
+            if (comprobador == 1) {                         //Si se esta sacando la segunda carta
+                console.log("Ultima carta")
+                cartaM = carta % 13
+                ultimaM = ultima % 13
+                if(gameGlobal.playerScore==2 && gameGlobal.machineScore==1){
+                    if (choice) {                           //Si escogio mayor
+                        console.log("Escogio mayor")
+                        while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    } else {                                //Si escogio menor
+                        console.log("Escogio menor")
+                        while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    }
+                
+                } else if(gameGlobal.playerScore==1 && gameGlobal.machineScore==2){
+                    if  (choice) {                           //Si escogio mayor
+                        console.log("Escogio mayor")
+                        while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    } else {                                //Si escogio menor
+                        console.log("Escogio menor")
+                        while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    }
+                
+                }
+                
+            }
+
+            console.log("Carta Salvavidas" + carta % 13)
+            cartasJugadas[cartasJugadas.length-1] = carta;
+            console.log(cartasJugadas)
+            card.loadTexture("cards" + this.getCardTexture(carta));
+            card.frame = this.getCardFrame(carta);
+            return card; 
+        }
+
+         //Para antepenultimo turno cuando van 1-1
+        console.log("validacion de antepenultimo turno")
+
+        if (gameGlobal.turno == gameGlobal.partidas - 2) {    //Si es el antepenultimo turno
+            console.log("antepenultimo turno")
+            if (comprobador == 1) {                         //Si se esta sacando la segunda carta
+                console.log("Ultima carta")
+                cartaM = carta % 13
+                ultimaM = ultima % 13
+                if((gameGlobal.playerScore==1 && gameGlobal.machineScore==1) || (gameGlobal.playerScore==2 && gameGlobal.machineScore==0)){
+                    if (choice) {                           //Si escogio mayor
+                        console.log("Escogio mayor")
+                        while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    } else {                                //Si escogio menor
+                        console.log("Escogio menor")
+                        while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    }
+                
+                } else if(gameGlobal.playerScore==0 && gameGlobal.machineScore==2){
+                    if  (choice) {                           //Si escogio mayor
+                        console.log("Escogio mayor")
+                        while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    } else {                                //Si escogio menor
+                        console.log("Escogio menor")
+                        while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
+                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
+                            cardIndex += 2;
+                            carta = this.deck[cardIndex];
+                            cartaM = carta % 13;
+                        }
+                    }
+                
+                }
+                
+            }
+
+            console.log("Carta Salvavidas" + carta % 13)
+            cartasJugadas[cartasJugadas.length-1] = carta;
+            console.log(cartasJugadas)
+            card.loadTexture("cards" + this.getCardTexture(carta));
+            card.frame = this.getCardFrame(carta);
+            return card; 
+        }
+
+        /**** CONDICIONES BOTON 5 ***/
+
+            console.log("ERROR-----------------")
         return 0;     
+
+
     },
 
 
