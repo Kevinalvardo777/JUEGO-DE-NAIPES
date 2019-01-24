@@ -4,7 +4,7 @@ var gameOptions = {
     gameHeight: 1334,
     cardSheetWidth: 334,
     cardSheetHeight: 440,
-    cardScale: 0.8,
+    cardScale: 0.8, //cuando se usen las imagenes del diseñador esto cambia a 1.0
     flipZoom: 1.2,
     flipSpeed: 1000
 
@@ -34,6 +34,7 @@ playGame.prototype = {
         for(var i = 0; i < 10; i++){
             game.load.spritesheet("cards" + i, "cards" + i + ".png", gameOptions.cardSheetWidth, gameOptions.cardSheetHeight);
         }
+        //game.load.spritesheet("cards9", "spritePrueba.png", 238, 0);
         
         game.load.image("fondoCarta", "carta_imajen_fondo.png");
         game.load.image("baraja", "baraja-poker-01.png");
@@ -444,30 +445,30 @@ playGame.prototype = {
     	for (var i = 1; i < gameGlobal.turno; i++) {
 			game.world.bringToTop(this.cartaMaquina[i-1]);
 			game.world.bringToTop(this.cartaJugador[i-1]);
-            var tween = game.add.tween(this.cartaMaquina[i-1]).to({
+            var fadeMaquina = game.add.tween(this.cartaMaquina[i-1]).to({
 	            x: (game.width / 12) + (i * this.cartaMaquina[i-1].width * 0.6),
 	            y: (game.height * 4/ 5) + (i * this.cartaMaquina[i-1].height/16),
 	            angle: -45 + (i * this.cartaMaquina[i-1].width * 0.15)
-	        }, 500, Phaser.Easing.Cubic.Out, true);
-	        var tween = game.add.tween(this.cartaJugador[i-1]).to({
+	        }, 700, Phaser.Easing.Cubic.Out, true);
+	        var fadeJugador = game.add.tween(this.cartaJugador[i-1]).to({
 	            x: game.width - (game.width / 12) - (i * this.cartaJugador[i-1].width * 0.6),
 	            y: (game.height * 4/ 5) + (i * this.cartaJugador[i-1].height/16),
 	            angle: +45 - (i * this.cartaJugador[i-1].width * 0.15)
-	        }, 500, Phaser.Easing.Cubic.Out, true); 
+	        }, 700, Phaser.Easing.Cubic.Out, true); 
         }
 
     	var tween = game.add.tween(this.cardsInGame[0]).to({
             x: game.width / 12,
             y: (game.height * 4/ 5),
             angle: -45
-        }, 500, Phaser.Easing.Cubic.Out, true);  
+        }, 700, Phaser.Easing.Cubic.Out, true);  
 
         this.cardsInGame[0].scale.set(gameOptions.cardScale);
         var tween = game.add.tween(this.cardsInGame[1]).to({
             x: game.width - (game.width / 12),
             y: game.height * 4/ 5,
             angle: 45
-        }, 500, Phaser.Easing.Cubic.Out, true);
+        }, 700, Phaser.Easing.Cubic.Out, true);
         this.cardsInGame[1].scale.set(gameOptions.cardScale);
         
         
@@ -825,13 +826,25 @@ console.log("validacion de ultimo turno")
     flipCard: function(e, cardFront) {
     	e.cardBack = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/12) + barajaSprite.height/2, "fondoCarta");
         e.cardBack.anchor.set(0.5);
-        e.cardBack.scale.set(gameOptions.cardScale);
+        //e.cardBack.scale.set(gameOptions.cardScale);
         e.cardBack.angle += 5;
-        e.cardBack.visible = false;
-
+        //e.cardBack.visible = false;
 
     	e.cardBack.isFlipping = true;
-    	e.cardBack.scale.set(gameOptions.cardScale);
+
+    	var movimiento0 = game.add.tween(e.cardBack).to({
+        	y: e.cardBack.y + (((game.height * 2 / 3) - e.cardBack.y)/3),
+            x: e.cardBack.x + (((game.width / 2) - e.cardBack.x)/3),
+        }, 400, null, true);
+
+        
+
+        var movimiento1 = game.add.tween(e.cardBack).to({
+        	y: game.height * 2 / 3,
+            x: game.width / 2,
+            angle: -5
+        }, 1500, Phaser.Easing.Cubic.Out, false);
+        //movimiento1.pause()
     	cardFront.isFlipping = true;
     	cardFront.scale.set(gameOptions.cardScale);
     	cardFront.angle += 5;
@@ -853,13 +866,13 @@ console.log("validacion de ultimo turno")
 
 	        flipTween2 = game.add.tween(cardFront.scale).to({
 	            x: 0,
-	            y: gameOptions.flipZoom
+	            y: gameOptions.flipZoom,
+	            angle: 0
 	        }, gameOptions.flipSpeed / 2, Phaser.Easing.Linear.None);
 
 	        flipTween.onComplete.add(function(){
 	        	cardFront.visible = true;
-	        	cardFront.angle -= 5;
-	        	e.cardBack.visible = false;
+	        	//e.cardBack.visible = false;
 	            backFlipTween.start();
 	        });
 
@@ -879,20 +892,20 @@ console.log("validacion de ultimo turno")
 	        } else {
 	        	e.cardBack.visible = true;
 	        }
-	        
-	        flipTween.start()
-	        flipTween2.start()
+	         
 
-	        game.add.tween(e.cardBack).to({
-	        	y: game.height * 2 / 3,
-	            x: game.width / 2
-	        }, 2000, Phaser.Easing.Cubic.Out, true);	        
+		    movimiento0.onComplete.add(function(){
+	        	movimiento1.start()
+	        	flipTween.start()
+	        	flipTween2.start()
+	        });
 	        
 
 	        return game.add.tween(cardFront).to({
 	        	y: game.height * 2 / 3,
-	            x: game.width / 2
-	        }, 2000, Phaser.Easing.Cubic.Out, true);
+	            x: game.width / 2,
+	            angle: 0
+	        }, 2500, Phaser.Easing.Cubic.Out, true);
 
     },
 
