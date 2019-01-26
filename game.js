@@ -193,12 +193,12 @@ playGame.prototype = {
             cartaTemporal = cartasJugadas[cartasJugadas.length- (1 + (i*2))]
             console.log("Carta del jugador Temporal: "+ cartaTemporal + ", " + cartaTemporal%13)
             this.cartaJugador[i] = game.add.sprite(game.width - (game.width / 12), game.height * 4/ 5, "cards0");
-            this.cartaJugador[i].anchor.set(0.65);
+            this.cartaJugador[i].anchor.set(0.6);
             this.cartaJugador[i].scale.set(gameOptions.cardScale);
             this.cartaJugador[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
             this.cartaJugador[i].frame = this.getCardFrame(cartaTemporal);
-            this.cartaJugador[i].x = game.width - (game.width / 13)+(32*i) - (i * this.cartaJugador[i].width * 0.55)
-            this.cartaJugador[i].y = (game.height * 4/ 5.5)+(35*i) + (i * this.cartaJugador[i].height/95)
+            this.cartaJugador[i].x = game.width - (game.width / 12)+(32*i) - (i * this.cartaJugador[i].width * 0.55)
+            this.cartaJugador[i].y = (game.height * 4/ 5.5)+(35*i) + (i * this.cartaJugador[i].height/90)
             
             
             this.cartaJugador[i].angle += 40 - (i * this.cartaJugador[i].width * 0.08);
@@ -443,30 +443,32 @@ playGame.prototype = {
             game.world.bringToTop(this.cartaMaquina[i-1]);
             game.world.bringToTop(this.cartaJugador[i-1]);
             var fadeMaquina = game.add.tween(this.cartaMaquina[i-1]).to({
-                x: (game.width / 12) + (i * this.cartaMaquina[i-1].width * 0.6),
-                y: (game.height * 4/ 5) + (i * this.cartaMaquina[i-1].height/16),
-                angle: -45 + (i * this.cartaMaquina[i-1].width * 0.15)
+                x: (game.width / 12)-(30*(i)) + ((i) * this.cartaMaquina[i-1].width * 0.55),
+                y: (game.height * 4/5.5)+(35*i) + ((i) * this.cartaMaquina[i-1].height/90),
+                angle: -40 + (i * this.cartaMaquina[i-1].width * 0.08)
             }, 700, Phaser.Easing.Cubic.Out, true);
             var fadeJugador = game.add.tween(this.cartaJugador[i-1]).to({
-                x: game.width - (game.width / 12) - (i * this.cartaJugador[i-1].width * 0.6),
-                y: (game.height * 4/ 5) + (i * this.cartaJugador[i-1].height/16),
-                angle: +45 - (i * this.cartaJugador[i-1].width * 0.15)
+                x: game.width - (game.width / 12)+(32*i) - (i * this.cartaJugador[i-1].width * 0.55),
+                y: (game.height * 4/ 5.5)+(35*i) + (i * this.cartaJugador[i-1].height/90),
+                angle: +40 - (i * this.cartaJugador[i-1].width * 0.08)
             }, 700, Phaser.Easing.Cubic.Out, true); 
         }
-
+        
         var tween = game.add.tween(this.cardsInGame[0]).to({
             x: game.width / 12,
-            y: (game.height * 4/ 5),
-            angle: -45
+            y: (game.height * 4/ 5.5),
+            angle: -40
         }, 700, Phaser.Easing.Cubic.Out, true);  
 
+        this.cardsInGame[0].anchor.set(0.6);
         this.cardsInGame[0].scale.set(gameOptions.cardScale);
         var tween = game.add.tween(this.cardsInGame[1]).to({
             x: game.width - (game.width / 12),
-            y: game.height * 4/ 5,
-            angle: 45
+            y: (game.height * 4/ 5.5),
+            angle: 40
         }, 700, Phaser.Easing.Cubic.Out, true);
         this.cardsInGame[1].scale.set(gameOptions.cardScale);
+        this.cardsInGame[1].anchor.set(0.6);
         
         
         game.time.events.add(Phaser.Timer.SECOND, function(){
