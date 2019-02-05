@@ -218,8 +218,8 @@ playGame.prototype = {
         button5.scale.setTo(0.5,0.5);
         button5.inputEnabled= true;
         
-        var mensaje3= game.add.text(game.width * 3/14, game.height /5, 'Usted tiene 3 intentos', { fontSize: '50px', fill: '#000' });
-        var mensaje5= game.add.text(game.width * 3/14, game.height /5, 'Usted tiene 5 intentos', { fontSize: '50px', fill: '#000' });
+        var mensaje3= game.add.text(game.width * 3/60, game.height /5, 'Usted tiene 3 intentos', { fontSize: '45px', fill: '#FFFFFF' });
+        var mensaje5= game.add.text(game.width * 3/60, game.height /5, 'Usted tiene 5 intentos', { fontSize: '45px', fill: '#FFFFFF' });
         mensaje3.visible= false;
         mensaje5.visible= false;
         
@@ -245,7 +245,7 @@ playGame.prototype = {
             
                                   
             
-            this.cartaMaquina[i].angle += -40 + (i * this.cartaMaquina[i].width * 0.08);
+            this.cartaMaquina[i].angle += -80 + (i * this.cartaMaquina[i].width * 0.08);
 
             cartaTemporal = cartasJugadas[cartasJugadas.length- (1 + (i*2))]
             console.log("Carta del jugador Temporal: "+ cartaTemporal + ", " + cartaTemporal%13)
@@ -267,8 +267,8 @@ playGame.prototype = {
 
         var textoNaipesBaraja = "NAIPES DE BARAJA";
         
-        game.add.text(game.width * 4/4.5, game.height / 2, textoTusNaipes, style);
-        game.add.text(game.width / 50, game.height / 2, textoNaipesBaraja, style);
+        game.add.text(game.width * 4/4.5, game.height / 1.4, textoTusNaipes, style);
+        game.add.text(game.width / 50, game.height / 1.4, textoNaipesBaraja, style);
         
 
         this.infoGroup = game.add.group();
