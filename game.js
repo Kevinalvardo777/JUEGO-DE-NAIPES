@@ -83,6 +83,7 @@ playGame.prototype = {
         mesaF1.scale.setTo(1.44,1.3);
 
         if (gameGlobal.turno == 0) {
+<<<<<<< HEAD
             barajaSprite = game.add.sprite(game.width * 1/8.2, 0, "baraja");
             barajaSprite.y = barajaSprite.height * -2;
 
@@ -104,6 +105,17 @@ playGame.prototype = {
             }, 2500, Phaser.Easing.Cubic.Out, true);
         } else {
             manoSprite= game.add.sprite(game.width * 1/7.2, game.height * 1/19.5, "mano");
+=======
+            barajaSprite = game.add.sprite(game.width * 1/6, 0, "baraja");
+            barajaSprite.y = barajaSprite.height * -2;
+
+            var tweenBaraja = game.add.tween(barajaSprite).to({
+                y: game.height / 12
+            }, 1000, Phaser.Easing.Cubic.Out, true);
+
+        } else {
+            barajaSprite = game.add.sprite(game.width * 1/6, game.height * 1/12, "baraja");
+>>>>>>> a1d3e332fcf553d82695069540fe01154defface
         }
 
         //barraLineaV = game.add.sprite(game.width * 2/3, game.height * 1/4, "barraLineaV");
@@ -167,8 +179,11 @@ playGame.prototype = {
                 masCelesteSheet.frame++;
             }
         }, this);
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> a1d3e332fcf553d82695069540fe01154defface
 
         botonV = game.add.sprite((game.width * 255/384) , game.height * 3/8, "botonV");
         boton = game.add.sprite((game.width * 255/384), game.height * 3/8, "boton");
@@ -227,11 +242,14 @@ playGame.prototype = {
         this.playerScoreText = game.add.text(game.width * 4/6.32, game.height * 5 / 140, '' + gameGlobal.playerScore, { fontFamily: 'courier', fontSize: '110px', fill: '#FFFFFF' });
         this.machineScoreText = game.add.text((game.width / 3.66) + puntajeM.width/2, game.height * 5 / 140, '' + gameGlobal.machineScore, { fontFamily: 'monospace',fontSize: '110px', fill: '#FFFFFF' });
 
+<<<<<<< HEAD
         this.playerText = game.add.text(game.width * 4/5.1, game.height * 5 / 100, '' + "Tu", { fontSize: '110px', fill: '#cc0066' });
         this.machineText = game.add.text((game.width / 12) + puntajeM.width/2, game.height * 5 / 100, '' + "Comp", { fontSize: '100px', fill: '#cc0066' });
         
 
 
+=======
+>>>>>>> a1d3e332fcf553d82695069540fe01154defface
         for (var i = 0; i < gameGlobal.turno; i++) {
             cartaTemporal = cartasJugadas[cartasJugadas.length-(2 * (i+1))]
             this.cartaMaquina[i] = game.add.sprite(game.width / 12, game.height * 4/ 5, "cards0");
@@ -250,6 +268,7 @@ playGame.prototype = {
             cartaTemporal = cartasJugadas[cartasJugadas.length- (1 + (i*2))]
             console.log("Carta del jugador Temporal: "+ cartaTemporal + ", " + cartaTemporal%13)
             this.cartaJugador[i] = game.add.sprite(game.width - (game.width / 12), game.height * 4/ 5, "cards0");
+<<<<<<< HEAD
             this.cartaJugador[i].anchor.set(0.65);
             this.cartaJugador[i].scale.set(gameOptions.cardScale);
             this.cartaJugador[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
@@ -258,6 +277,16 @@ playGame.prototype = {
             this.cartaJugador[i].y = (game.height * 4/ 5.5)+(35*i) + (i * this.cartaJugador[i].height/95)
             
             
+=======
+            this.cartaJugador[i].anchor.set(0.6);
+            this.cartaJugador[i].scale.set(gameOptions.cardScale);
+            this.cartaJugador[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
+            this.cartaJugador[i].frame = this.getCardFrame(cartaTemporal);
+            this.cartaJugador[i].x = game.width - (game.width / 12)+(32*i) - (i * this.cartaJugador[i].width * 0.55)
+            this.cartaJugador[i].y = (game.height * 4/ 5.5)+(35*i) + (i * this.cartaJugador[i].height/90)
+            
+            
+>>>>>>> a1d3e332fcf553d82695069540fe01154defface
             this.cartaJugador[i].angle += 40 - (i * this.cartaJugador[i].width * 0.08);
         }
         
@@ -500,6 +529,7 @@ playGame.prototype = {
             game.world.bringToTop(this.cartaMaquina[i-1]);
             game.world.bringToTop(this.cartaJugador[i-1]);
             var fadeMaquina = game.add.tween(this.cartaMaquina[i-1]).to({
+<<<<<<< HEAD
                 x: (game.width / 12) + (i * this.cartaMaquina[i-1].width * 0.6),
                 y: (game.height * 4/ 5) + (i * this.cartaMaquina[i-1].height/16),
                 angle: -45 + (i * this.cartaMaquina[i-1].width * 0.15)
@@ -515,15 +545,39 @@ playGame.prototype = {
             x: game.width / 12,
             y: (game.height * 4/ 5),
             angle: -45
+=======
+                x: (game.width / 12)-(30*(i)) + ((i) * this.cartaMaquina[i-1].width * 0.55),
+                y: (game.height * 4/5.5)+(35*i) + ((i) * this.cartaMaquina[i-1].height/90),
+                angle: -40 + (i * this.cartaMaquina[i-1].width * 0.08)
+            }, 700, Phaser.Easing.Cubic.Out, true);
+            var fadeJugador = game.add.tween(this.cartaJugador[i-1]).to({
+                x: game.width - (game.width / 12)+(32*i) - (i * this.cartaJugador[i-1].width * 0.55),
+                y: (game.height * 4/ 5.5)+(35*i) + (i * this.cartaJugador[i-1].height/90),
+                angle: +40 - (i * this.cartaJugador[i-1].width * 0.08)
+            }, 700, Phaser.Easing.Cubic.Out, true); 
+        }
+        
+        var tween = game.add.tween(this.cardsInGame[0]).to({
+            x: game.width / 12,
+            y: (game.height * 4/ 5.5),
+            angle: -40
+>>>>>>> a1d3e332fcf553d82695069540fe01154defface
         }, 700, Phaser.Easing.Cubic.Out, true);  
 
+        this.cardsInGame[0].anchor.set(0.6);
         this.cardsInGame[0].scale.set(gameOptions.cardScale);
         var tween = game.add.tween(this.cardsInGame[1]).to({
             x: game.width - (game.width / 12),
+<<<<<<< HEAD
             y: game.height * 4/ 5,
             angle: 45
+=======
+            y: (game.height * 4/ 5.5),
+            angle: 40
+>>>>>>> a1d3e332fcf553d82695069540fe01154defface
         }, 700, Phaser.Easing.Cubic.Out, true);
         this.cardsInGame[1].scale.set(gameOptions.cardScale);
+        this.cardsInGame[1].anchor.set(0.6);
         
         
         game.time.events.add(Phaser.Timer.SECOND, function(){
