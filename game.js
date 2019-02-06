@@ -31,12 +31,12 @@ var playGame = function(game) {}
 playGame.prototype = {
     preload: function() {
         game.load.image("background", "mesafondo-01.png");
-        game.load.spritesheet("ruleta", "Ruleta-01.png", 300, 550);
+        
         for(var i = 0; i < 10; i++){
             game.load.spritesheet("cards" + i, "cards" + i + ".png", gameOptions.cardSheetWidth, gameOptions.cardSheetHeight);
         }
         //game.load.spritesheet("cards9", "spritePrueba.png", 238, 0);
-        
+        game.load.spritesheet("ruleta", "Ruleta-01.png", 300, 550);
         game.load.image("fondoCarta", "carta_imajen_fondo.png");
         game.load.image("baraja", "baraja-poker-01.png");
         game.load.spritesheet("mano", "Mano-01.png", 500, 500);
@@ -81,6 +81,9 @@ playGame.prototype = {
     create: function() {
         mesaF1= game.add.tileSprite(0, 0, Math.floor(gameOptions.gameWidth/2) *3.5, Math.floor(gameOptions.gameHeight/2) *2, 'background');
         mesaF1.scale.setTo(1.44,1.3);
+
+        this.ruleta= game.add.sprite(1.03*game.width - (game.width /6.55) , game.height/3.6, "ruleta");
+        this.ruleta.scale.setTo(1.2,1.2);
 
         if (gameGlobal.turno == 0) {
             barajaSprite = game.add.sprite(game.width * 1/8.2, 0, "baraja");
@@ -168,7 +171,8 @@ playGame.prototype = {
             }
         }, this);
 
-
+        /*ruleta= game.add.sprite( 1.03*game.width - (game.width /6.55) , game.height/3.6, "ruleta");*/
+        /*ruleta.scale.setTo(1.2,1.2);*/
 
         botonV = game.add.sprite((game.width * 255/384) , game.height * 3/8, "botonV");
         boton = game.add.sprite((game.width * 255/384), game.height * 3/8, "boton");
@@ -196,8 +200,7 @@ playGame.prototype = {
         avatarDer.scale.x *= -1;
         /*avatarDer.angle = -360;*/
 
-        ruleta= game.add.sprite( 1.03*game.width - (game.width / 50) - (puntajeM.width), game.height/3.6, "ruleta");
-        ruleta.scale.setTo(1.2,1.2);
+        
 
         publicidad= game.add.sprite(game.width/1000, game.height/1.129, "publicidad");
         publicidad.scale.setTo(1.44,1.38);
@@ -234,34 +237,38 @@ playGame.prototype = {
 
         for (var i = 0; i < gameGlobal.turno; i++) {
             cartaTemporal = cartasJugadas[cartasJugadas.length-(2 * (i+1))]
-            this.cartaMaquina[i] = game.add.sprite(game.width / 12, game.height * 4/ 5, "cards0");
+
+            this.cartaMaquina[i] = game.add.sprite(game.width / 12, game.height * 4/ 30, "cards0");
             this.cartaMaquina[i].anchor.set(0.6);
             this.cartaMaquina[i].scale.set(gameOptions.cardScale);
             this.cartaMaquina[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
             this.cartaMaquina[i].frame = this.getCardFrame(cartaTemporal);  
 
-            this.cartaMaquina[i].x = (game.width / 12)-(30*i) + ((i) * this.cartaMaquina[i].width * 0.55) 
-            this.cartaMaquina[i].y = (game.height * 4/5.5)+(35*i) + ((i) * this.cartaMaquina[i].height/90)
+            this.cartaMaquina[i].x = (game.width / 25)-(30*i) + ((i) * this.cartaMaquina[i].width * 0.10) 
+            this.cartaMaquina[i].y = (game.height * 4/9)+(35*i) + ((i) * this.cartaMaquina[i].height/30)
             
                                   
             
-            this.cartaMaquina[i].angle += -80 + (i * this.cartaMaquina[i].width * 0.08);
+            this.cartaMaquina[i].angle += 50 + (i * this.cartaMaquina[i].width * 0.08);
 
             cartaTemporal = cartasJugadas[cartasJugadas.length- (1 + (i*2))]
             console.log("Carta del jugador Temporal: "+ cartaTemporal + ", " + cartaTemporal%13)
-            this.cartaJugador[i] = game.add.sprite(game.width - (game.width / 12), game.height * 4/ 5, "cards0");
+            this.cartaJugador[i] = game.add.sprite(game.width - (game.width / 12), game.height * 4/ 30, "cards0");
             this.cartaJugador[i].anchor.set(0.65);
             this.cartaJugador[i].scale.set(gameOptions.cardScale);
             this.cartaJugador[i].loadTexture("cards" + this.getCardTexture(cartaTemporal));
             this.cartaJugador[i].frame = this.getCardFrame(cartaTemporal);
-            this.cartaJugador[i].x = game.width - (game.width / 13)+(32*i) - (i * this.cartaJugador[i].width * 0.55)
-            this.cartaJugador[i].y = (game.height * 4/ 5.5)+(35*i) + (i * this.cartaJugador[i].height/95)
+            this.cartaJugador[i].x = game.width - (game.width / 14)+(30*i) - (i * this.cartaJugador[i].width * 0.10)
+            this.cartaJugador[i].y = (game.height * 4/ 9)+(35*i) + (i * this.cartaJugador[i].height/90)
             
             
-            this.cartaJugador[i].angle += 40 - (i * this.cartaJugador[i].width * 0.08);
+            this.cartaJugador[i].angle -= 40 + (i * this.cartaJugador[i].width * 0.08);
+            this.ruleta= game.add.sprite(1.03*game.width - (game.width /6.55) , game.height/3.6, "ruleta");
+            this.ruleta.scale.setTo(1.2,1.2);
+
         }
         
-
+        
         var textoTusNaipes = "TUS NAIPES";
         var style = {font: "40px Arial", fill: "#ffffff", align: "center"};
 
@@ -508,29 +515,29 @@ playGame.prototype = {
             game.world.bringToTop(this.cartaMaquina[i-1]);
             game.world.bringToTop(this.cartaJugador[i-1]);
             var fadeMaquina = game.add.tween(this.cartaMaquina[i-1]).to({
-                x: (game.width / 12)-(30*(i)) + ((i) * this.cartaMaquina[i-1].width * 0.55),
-                y: (game.height * 4/5.5)+(35*(i)) + ((i) * this.cartaMaquina[i-1].height/90),
-                angle: -40 + (i * this.cartaMaquina[i-1].width * 0.08)
+                x: (game.width / 25)-(30*(i)) + ((i) * this.cartaMaquina[i-1].width * 0.10),
+                y: (game.height * 4/9)+(35*(i)) + ((i) * this.cartaMaquina[i-1].height/30),
+                angle: +50 + (i * this.cartaMaquina[i-1].width * 0.08)
             }, 700, Phaser.Easing.Cubic.Out, true);
             var fadeJugador = game.add.tween(this.cartaJugador[i-1]).to({
-                x: game.width - (game.width / 13)+(32*i) - (i * this.cartaJugador[i-1].width * 0.55),
-                y: (game.height * 4/ 5.5)+(35*i) + (i * this.cartaJugador[i-1].height/95),
-                angle: 40 - (i * this.cartaJugador[i-1].width * 0.08)
+                x: game.width - (game.width / 14)+(30*i) - (i * this.cartaJugador[i-1].width * 0.10),
+                y: (game.height * 4/ 9)+(35*i) + (i * this.cartaJugador[i-1].height/90),
+                angle: -40 - (i * this.cartaJugador[i-1].width * 0.08)
             }, 700, Phaser.Easing.Cubic.Out, true); 
         }
         this.cardsInGame[0].anchor.set(0.6)
         var tween = game.add.tween(this.cardsInGame[0]).to({
-            x: (game.width / 12),
-            y: (game.height * 4/5.5),
-            angle: -40
+            x: (game.width / 25),
+            y: (game.height * 4/9),
+            angle: +50
         }, 700, Phaser.Easing.Cubic.Out, true);  
 
         this.cardsInGame[0].scale.set(gameOptions.cardScale);
         this.cardsInGame[1].anchor.set(0.65)
         var tween = game.add.tween(this.cardsInGame[1]).to({
-            x: game.width - (game.width / 13),
-            y: (game.height * 4/5.5),
-            angle: 40
+            x: game.width - (game.width / 14),
+            y: (game.height * 4/9),
+            angle: -40
         }, 700, Phaser.Easing.Cubic.Out, true);
         this.cardsInGame[1].scale.set(gameOptions.cardScale);
         
@@ -538,6 +545,9 @@ playGame.prototype = {
         game.time.events.add(Phaser.Timer.SECOND, function(){
             game.state.start("PlayGame");    
         }, this)  
+
+        this.ruleta= game.add.sprite(1.03*game.width - (game.width /6.55) , game.height/3.6, "ruleta");
+        this.ruleta.scale.setTo(1.2,1.2);
 
     },
 
