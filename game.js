@@ -52,10 +52,9 @@ playGame.prototype = {
         //game.load.spritesheet("masCelesteSheet", "mas_Celeste.png", 48,0)
         game.load.spritesheet("prueba", "Prueba.png", 158,0)
         //game.load.spritesheet("cartaFiloVerde", "brillo_verde_cartafilo.png", 9805 / 28,0)
-        
 
-        game.load.spritesheet("barraCelesteSheet", "Barra_Celeste_Sprite.png", 182,0)
-        game.load.spritesheet("barraVerdeSheet", "Barra_Verde_Sprite.png", 182,0)
+        game.load.spritesheet("barraCeleste", "Barra_mayor_menor_celeste.png", 170,0)
+        game.load.spritesheet("barraVerde", "Barra_mayor_menor_verde.png", 170,0)
 
         game.load.image("masCelesteBrillo", "Barra_mas_brillo_celeste.png");
         
@@ -111,27 +110,6 @@ playGame.prototype = {
             manoSprite= game.add.sprite(game.width * 1/7.2, game.height * 1/19.5, "mano");
         }
 
-        //barraLineaV = game.add.sprite(game.width * 2/3, game.height * 1/4, "barraLineaV");
-        //barraLinea = game.add.sprite(game.width * 2/3, game.height * 1/4, "barraLinea");
-        //masCeleste = game.add.sprite(game.width * 2/3 + (barraLinea.width * 1/6), game.height * 1/4 + (barraLinea.height * 1/20), "masCeleste");
-        //masCelesteClaro = game.add.sprite(game.width * 2/3 + (barraLinea.width * 1/6), game.height * 1/4 + (barraLinea.height * 1/20), "masCelesteClaro");
-        
-
-        //masCelesteBrillo = game.add.sprite(game.width * 2/3 - (barraLinea.width * 7/12), game.height * 1/4 - (barraLinea.height * 1/30), "masCelesteBrillo");
-        //prueba = game.add.sprite(game.width * 2/3 + (barraLinea.width * 1/6), game.height * 1/4 + (barraLinea.height * 1/20), "masCelesteSheet");
-
-        barraVerdeSheet = game.add.sprite(game.width * 2/3 , game.height * 1/6 , "barraVerdeSheet");
-        var tween = game.add.tween(barraVerdeSheet).to({
-        }, 1, Phaser.Easing.Linear.None, true).loop(true);
-
-        tween.onLoop.add(function() {
-            if (barraVerdeSheet.frame == 2) {
-                barraVerdeSheet.frame = 0;
-            }
-            else {
-                barraVerdeSheet.frame++;
-            }
-        }, this);
         /*
         cartaFiloVerde = game.add.sprite(game.width * 1/2 , game.height * 1/2 , "cartaFiloVerde");
         var tween = game.add.tween(cartaFiloVerde).to({
@@ -143,41 +121,52 @@ playGame.prototype = {
             else {
                 cartaFiloVerde.frame++;
             }
-        }, this);
+        }, this);       
+        
         */
-        barraCelesteSheet = game.add.sprite(game.width * 2/3 , game.height * 1/6 , "barraCelesteSheet");
-        var tween = game.add.tween(barraCelesteSheet).to({
+
+        barraVerde = game.add.sprite(game.width * 0.65 , game.height * 1/6 , "barraVerde");
+        barraVerde.scale.setTo(1.44,1.3);
+        var tweenBarraVerde = game.add.tween(barraVerde).to({
         }, 10, Phaser.Easing.Linear.None, true).loop(true);
 
-        tween.onLoop.add(function() {
-            if (barraCelesteSheet.frame == 2) {
-                barraCelesteSheet.frame = 0;
+        tweenBarraVerde.onLoop.add(function() {
+            if (barraVerde.frame == 2) {
+                barraVerde.frame = 0;
             }
             else {
-                barraCelesteSheet.frame++;
+                barraVerde.frame++;
             }
         }, this);
 
 
-        masCelesteSheet = game.add.sprite(game.width * 257/384, game.height * 9/48, "prueba");
-        var tween = game.add.tween(masCelesteSheet).to({
-        }, 5, Phaser.Easing.Linear.None, true).loop(true);
+        barraCeleste = game.add.sprite(game.width * 0.65 , game.height * 1/6 , "barraCeleste");
+        barraCeleste.scale.setTo(1.44,1.3);
+        var tweenBarraCeleste = game.add.tween(barraCeleste).to({
+        }, 10, Phaser.Easing.Linear.None, true).loop(true);
 
-        
-        tween.onLoop.add(function() {
-            if (masCelesteSheet.frame == 2) {
-                masCelesteSheet.frame = 0;
+        tweenBarraCeleste.onLoop.add(function() {
+            if (barraCeleste.frame == 2) {
+                barraCeleste.frame = 0;
             }
             else {
-                masCelesteSheet.frame++;
+                barraCeleste.frame++;
             }
         }, this);
 
         /*ruleta= game.add.sprite( 1.03*game.width - (game.width /6.55) , game.height/3.6, "ruleta");*/
         /*ruleta.scale.setTo(1.2,1.2);*/
 
-        botonV = game.add.sprite((game.width * 255/384) , game.height * 3/8, "botonV");
-        boton = game.add.sprite((game.width * 255/384), game.height * 3/8, "boton");
+        //botonV = game.add.sprite((game.width * 255/384) , game.height * 3/8, "botonV");
+        //boton = game.add.sprite((game.width * 255/384), game.height * 3/8, "boton");
+
+        botonV = game.add.sprite(game.width * 0.65 , game.height * 1/6 , "barraVerde");
+        botonV.frame = 3;
+        botonV.scale.setTo(1.44,1.3);
+        boton = game.add.sprite(game.width * 0.65 , game.height * 1/6 , "barraCeleste");
+        boton.frame = 3;
+        boton.scale.setTo(1.44,1.3);
+
 
         game.physics.enable(botonV, Phaser.Physics.ARCADE);
         
@@ -284,7 +273,7 @@ playGame.prototype = {
 
         }
         
-        
+        /*
         var textoTusNaipes = "TUS NAIPES";
         var style = {font: "40px Arial", fill: "#ffffff", align: "center"};
 
@@ -292,7 +281,7 @@ playGame.prototype = {
         
         game.add.text(game.width * 4/4.5, game.height / 1.4, textoTusNaipes, style);
         game.add.text(game.width / 50, game.height / 1.4, textoNaipesBaraja, style);
-        
+        */
 
         this.infoGroup = game.add.group();
         this.infoGroup.visible = false;
@@ -440,11 +429,14 @@ playGame.prototype = {
         var swipeNormal = Phaser.Point.normalize(swipeDistance);
         if(swipeMagnitude > 25 && swipeTime < 1000 && Math.abs(swipeNormal.y) > 0.8) {
             if(swipeNormal.y > 0.8) {
-                barraCelesteSheet.visible= false;
+                barraCeleste.visible= false;
                 boton.visible= false;
+                console.log("BOton V")
+                console.log(botonV.y)
                 game.add.tween(botonV).to({
-                    y: (game.height * 125/192)
+                    y: (game.height * 0.36)
                 }, 1000, Phaser.Easing.Cubic.Out, true);
+                console.log(botonV.y)
                 if (gameGlobal.turno >= gameGlobal.partidas/2) {        //Si esta en el ultimo turno
                     console.log("Entro a menor")
                     var cartaSalvavidas = this.makeWinnerCard(1, false);
@@ -454,11 +446,14 @@ playGame.prototype = {
                 this.handleSwipe(1);
             }
             if(swipeNormal.y < -0.8) {
-                barraCelesteSheet.visible= false;
+                barraCeleste.visible= false;
                 boton.visible= false;
+                console.log("BOton V")
+                console.log(botonV.y)
                 game.add.tween(botonV).to({
-                    y: (game.height * 1 / 6)
+                    y: (game.height * -0.03)
                 }, 1000, Phaser.Easing.Cubic.Out, true);
+                console.log(botonV.y)
                 if (gameGlobal.turno >= gameGlobal.partidas/2) {        //Si esta en el ultimo turno
                     console.log("Entro a mayor")
                     var cartaSalvavidas = this.makeWinnerCard(1, true);
