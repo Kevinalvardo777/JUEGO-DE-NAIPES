@@ -35,7 +35,7 @@ playGame.prototype = {
         for(var i = 0; i < 10; i++){
             game.load.spritesheet("cards" + i, "cards" + i + ".png", gameOptions.cardSheetWidth, gameOptions.cardSheetHeight);
         }
-        //game.load.spritesheet("cards9", "spritePrueba.png", 238, 0);
+
         game.load.spritesheet("ruleta", "Ruleta-01.png", 300, 550);
         game.load.image("fondoCarta", "carta_imajen_fondo.png");
         game.load.image("baraja", "baraja-poker-01.png");
@@ -43,23 +43,11 @@ playGame.prototype = {
         
         game.load.spritesheet("indicaciones", "indicaciones1.png", 500, 184);
         game.load.spritesheet("indicaciones", "indicaciones1.png", 500, 184);
-        game.load.image("barraLinea", "Barra_linea_celeste.png");
-        game.load.image("barraLineaV", "Barra_linea_verde.png");
-        game.load.image("masCeleste", "Barra_mas_celeste.png");
-        game.load.image("masCelesteClaro", "Barra_mas_celesteclaro.png");
-        game.load.image("masVerde", "Barra_mas_verde.png");
-        game.load.image("masVerdeClaro", "Barra_mas_verdeclaro.png");
-        //game.load.spritesheet("masCelesteSheet", "mas_Celeste.png", 48,0)
-        game.load.spritesheet("prueba", "Prueba.png", 158,0)
-        //game.load.spritesheet("cartaFiloVerde", "brillo_verde_cartafilo.png", 9805 / 28,0)
 
         game.load.spritesheet("barraCeleste", "Barra_mayor_menor_celeste.png", 170,0)
         game.load.spritesheet("barraVerde", "Barra_mayor_menor_verde.png", 170,0)
 
-        game.load.image("masCelesteBrillo", "Barra_mas_brillo_celeste.png");
         
-        game.load.image("boton", "boton_celeste.png");
-        game.load.image("botonV", "boton_verde.png");
         game.load.spritesheet("swipe", "swipe.png", 80, 130);
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         game.scale.pageAlignHorizontally = true;
