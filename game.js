@@ -54,7 +54,7 @@ playGame.prototype = {
         game.scale.pageAlignVertically = true;
         game.load.spritesheet("tuPuntaje", "fichas partes-01.png", 250, 167);
         game.load.spritesheet("puntajeMaquina", "fichas partes-06.png", 250, 167);
-        game.load.spritesheet("cuadroUsuarioSheet", "cuadro_usuario-01.png", 1400,175 );
+        game.load.spritesheet("cuadroUsuarioSheet", "cuadro_usuario-01.png", 700, 0);
         game.load.spritesheet("avatarU", "Avatars-01.png", 85, 90);
         game.load.spritesheet("avatarD", "Avatars-02.png", 85, 87);
         game.load.spritesheet("publicidad", "Publicidad_barra _inferior-01.png",519 ,0);
@@ -166,10 +166,35 @@ playGame.prototype = {
 
         cuadroUsuarioIzq= game.add.sprite(game.width / 15, game.height/2006, "cuadroUsuarioSheet");
         cuadroUsuarioIzq.scale.setTo(1,1.4);
+        var tweenCuadroUsuarioIzq = game.add.tween(cuadroUsuarioIzq).to({
+        }, 10, Phaser.Easing.Linear.None, true).loop(true);
 
-        cuadroUsuarioDer= game.add.sprite(1.05*game.width - (game.width / 50) - (puntajeM.width), game.height / 2006, "cuadroUsuarioSheet");
+        tweenCuadroUsuarioIzq.onLoop.add(function() {
+            if (cuadroUsuarioIzq.frame == 1) {
+                cuadroUsuarioIzq.frame = 0;
+            }
+            else {
+                cuadroUsuarioIzq.frame++;
+            }
+        }, this);
+
+
+        cuadroUsuarioDer= game.add.sprite(game.width - (game.width / 15) - cuadroUsuarioIzq.width, game.height / 2006, "cuadroUsuarioSheet");
+        cuadroUsuarioDer.frame = 2;
         cuadroUsuarioDer.scale.setTo(1,1.4);
-        cuadroUsuarioDer.scale.x *= -1;
+        var tweenCuadroUsuarioDer = game.add.tween(cuadroUsuarioDer).to({
+        }, 10, Phaser.Easing.Linear.None, true).loop(true);
+
+        tweenCuadroUsuarioDer.onLoop.add(function() {
+            if (cuadroUsuarioDer.frame == 3) {
+                cuadroUsuarioDer.frame = 2;
+            }
+            else {
+                cuadroUsuarioDer.frame++;
+            }
+        }, this);
+
+
 
         avatarIzq= game.add.sprite(game.width/ 12, game.height/37, "avatarU");
         avatarIzq.scale.setTo(2, 2);
@@ -514,15 +539,15 @@ playGame.prototype = {
     },
 
     fadeCards: function(){
-    	/*
-    	this.cartaMaquina[i].x = (game.width / 12)-(30*i) + ((i) * this.cartaMaquina[i].width * 0.55) 
+        /*
+        this.cartaMaquina[i].x = (game.width / 12)-(30*i) + ((i) * this.cartaMaquina[i].width * 0.55) 
         this.cartaMaquina[i].y = (game.height * 4/5.5)+(35*i) + ((i) * this.cartaMaquina[i].height/90)
         this.cartaMaquina[i].angle += -40 + (i * this.cartaMaquina[i].width * 0.08);
 
         this.cartaJugador[i].x = game.width - (game.width / 13)+(32*i) - (i * this.cartaJugador[i].width * 0.55)
         this.cartaJugador[i].y = (game.height * 4/ 5.5)+(35*i) + (i * this.cartaJugador[i].height/95)
         this.cartaJugador[i].angle += 40 - (i * this.cartaJugador[i].width * 0.08);
-		*/
+        */
         for (var i = 1; i < gameGlobal.turno; i++) {
             game.world.bringToTop(this.cartaMaquina[i-1]);
             game.world.bringToTop(this.cartaJugador[i-1]);
