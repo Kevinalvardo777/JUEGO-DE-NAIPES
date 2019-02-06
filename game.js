@@ -4,7 +4,7 @@ var gameOptions = {
     gameHeight: 1334,
     cardSheetWidth: 159,
     cardSheetHeight: 241,
-    cardScale: (1.44,1.3), //cuando se usen las imagenes del diseñador esto cambia a 1.0
+    cardScale: (1.44,1.3),
     flipZoom: 0.2,
     flipSpeed: 1000
 
@@ -39,6 +39,8 @@ playGame.prototype = {
         game.load.spritesheet("ruleta", "Ruleta-01.png", 300, 550);
         game.load.image("fondoCarta", "carta_imajen_fondo.png");
         game.load.image("baraja", "baraja-poker-01.png");
+        game.load.image("botonPlay", "Boton_play.png");
+        game.load.image("pared", "pared.png");
         game.load.spritesheet("mano", "Mano-01.png", 570, 0);
         
         game.load.spritesheet("indicaciones", "indicaciones1.png", 500, 184);
@@ -57,7 +59,7 @@ playGame.prototype = {
         game.load.spritesheet("cuadroUsuarioSheet", "cuadro_usuario-01.png", 700, 0);
         game.load.spritesheet("avatarU", "Avatars-01.png", 85, 90);
         game.load.spritesheet("avatarD", "Avatars-02.png", 85, 87);
-        game.load.spritesheet("publicidad", "Publicidad_barra _inferior-01.png",519 ,0);
+        game.load.spritesheet("publicidad", "Publicidad_barra_inferior-01.png",519 ,0);
         game.load.spritesheet("logoJuego", "logo -01.png");
         game.load.spritesheet("button3", "button3.png", 302, 200);
         game.load.spritesheet("button5", "button5.png", 302, 200);
@@ -231,11 +233,11 @@ playGame.prototype = {
         }
         console.log(gameGlobal.turno)
 
-        var button3= game.add.button(game.width * 3/8, game.height * 1/2, 'button3');
+        var button3= game.add.button(game.width * 3/8, game.height * 3/4, 'button3');
         button3.scale.setTo(0.5,0.5);
         button3.inputEnabled= true;
 
-        var button5= game.add.button(game.width * 3/5.3, game.height * 1/2, 'button5');
+        var button5= game.add.button(game.width * 3/5.3, game.height * 3/4, 'button5');
         button5.scale.setTo(0.5,0.5);
         button5.inputEnabled= true;
         
@@ -539,15 +541,6 @@ playGame.prototype = {
     },
 
     fadeCards: function(){
-        /*
-        this.cartaMaquina[i].x = (game.width / 12)-(30*i) + ((i) * this.cartaMaquina[i].width * 0.55) 
-        this.cartaMaquina[i].y = (game.height * 4/5.5)+(35*i) + ((i) * this.cartaMaquina[i].height/90)
-        this.cartaMaquina[i].angle += -40 + (i * this.cartaMaquina[i].width * 0.08);
-
-        this.cartaJugador[i].x = game.width - (game.width / 13)+(32*i) - (i * this.cartaJugador[i].width * 0.55)
-        this.cartaJugador[i].y = (game.height * 4/ 5.5)+(35*i) + (i * this.cartaJugador[i].height/95)
-        this.cartaJugador[i].angle += 40 - (i * this.cartaJugador[i].width * 0.08);
-        */
         for (var i = 1; i < gameGlobal.turno; i++) {
             game.world.bringToTop(this.cartaMaquina[i-1]);
             game.world.bringToTop(this.cartaJugador[i-1]);
@@ -1025,16 +1018,43 @@ console.log("validacion de ultimo turno")
     finalizar: function(e) {
         //mensaje de final del juego
         var mensaje;
+
+        var pared = game.add.sprite(0, 0, "pared")
+        //game.world.bringToTop(pared);
+        pared.scale.setTo(1.44,1.3);
+
+        cuadroUsuarioIzq= game.add.sprite(game.width / 15, game.height/2006, "cuadroUsuarioSheet");
+        cuadroUsuarioIzq.scale.setTo(1,1.4);
+        cuadroUsuarioDer= game.add.sprite(game.width - (game.width / 15) - cuadroUsuarioIzq.width, game.height / 2006, "cuadroUsuarioSheet");
+        cuadroUsuarioDer.frame = 2;
+        cuadroUsuarioDer.scale.setTo(1,1.4);
+
+        puntajeM = game.add.sprite(game.width / 3.8, game.height / 2006, "puntajeMaquina");
+        puntajeM.scale.y *= -1;
+        puntajeM.scale.setTo(1.35, 1.35);
+        puntajeJ = game.add.sprite(game.width - (game.width / 6) - (puntajeM.width), game.height / 2006, "tuPuntaje");
+        puntajeJ.scale.setTo(-1.35,1.35);
+
+        avatarIzq= game.add.sprite(game.width/ 12, game.height/37, "avatarU");
+        avatarIzq.scale.setTo(2, 2);
+
+        avatarDer= game.add.sprite(1.03*game.width - (game.width / 50) - (puntajeM.width), game.height / 37, "avatarD");
+        avatarDer.scale.setTo(2,2);
+        avatarDer.scale.x *= -1;
+
+        logo= game.add.sprite(game.width/ 2.35, game.height/250, "logoJuego");
+        logo.scale.setTo(0.5, 0.5);
         
         if (gameGlobal.playerScore > gameGlobal.machineScore) {
-            mensaje = game.add.text(game.width * 5/14, game.height /3, 'Fin del juego\n Usted Gana', { fontSize: '150px', fill: '#000' });
+            mensaje = game.add.text(game.width * 5/14, game.height /3, 'Fin del juego\nUsted Gana', { fontSize: '150px', fill: '#000' });
             game.paused = true;            
         } else {
-            mensaje = game.add.text(game.width * 5/14, game.height /3, 'Fin del juego\n Usted Pierde', { fontSize: '150px', fill: '#000' });
+            mensaje = game.add.text(game.width * 5/14, game.height /3, 'Fin del juego\nUsted Pierde', { fontSize: '150px', fill: '#000' });
             game.paused = true;
         }
 
-        var continuar = game.add.text(game.width * 11/28, game.height * 2/3, "Continuar", { fontSize: '150px', fill: '#000' })
+        //var continuar = game.add.text(game.width * 11/28, game.height * 2/3, "Continuar", { fontSize: '150px', fill: '#000' })
+        var continuar = game.add.sprite(game.width * 10/28, game.height * 3/6, "botonPlay")
         continuar.inputEnabled = true;
 //Si se presiona continuar
         continuar.events.onInputDown.add(function () {
@@ -1061,6 +1081,7 @@ console.log("validacion de ultimo turno")
             e.playerScoreText.setText("0");
             e.machineScoreText.setText("0");
             continuar.destroy();
+            pared.destroy();
             mensaje.destroy();
 
         });
