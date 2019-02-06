@@ -39,7 +39,7 @@ playGame.prototype = {
         game.load.spritesheet("ruleta", "Ruleta-01.png", 300, 550);
         game.load.image("fondoCarta", "carta_imajen_fondo.png");
         game.load.image("baraja", "baraja-poker-01.png");
-        game.load.spritesheet("mano", "Mano-01.png", 500, 500);
+        game.load.spritesheet("mano", "Mano-01.png", 570, 0);
         
         game.load.spritesheet("indicaciones", "indicaciones1.png", 500, 184);
         game.load.spritesheet("indicaciones", "indicaciones1.png", 500, 184);
@@ -105,6 +105,8 @@ playGame.prototype = {
             var tweenMano= game.add.tween(manoSprite).to({
                 y: game.height/19.5
             }, 2500, Phaser.Easing.Cubic.Out, true);
+
+            
         } else {
             manoSprite= game.add.sprite(game.width * 1/7.2, game.height * 1/19.5, "mano");
         }
@@ -341,11 +343,24 @@ playGame.prototype = {
     },
 
     makeCard: function(cardIndex) {
-        var card = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/12) + barajaSprite.height/2, "cards0");
+        var card = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/4) + barajaSprite.height/2, "cards0");
         card.visible = false;
         card.anchor.set(0.5);
         card.scale.set(gameOptions.cardScale);
         //card.angle += 5;
+
+        var tweenManoSprite = game.add.tween(manoSprite).to({
+        }, 400, Phaser.Easing.Linear.None, true).loop(true);
+        manoSprite.frame = 1;
+
+        tweenManoSprite.onLoop.add(function() {
+            if (manoSprite.frame == 4) {
+                return;
+            }
+            else {
+                manoSprite.frame++;
+            }
+        }, this);
         
         var carta = this.deck[cardIndex];        
         var comprobador = cardIndex;
@@ -447,7 +462,7 @@ playGame.prototype = {
         var cardToMove = (this.nextCardIndex + 1) % 2;
         console.log("Carta a mover: "+cardToMove)
         this.cardsInGame[cardToMove].visible = true;
-        this.cardsInGame[cardToMove].y += dir * gameOptions.cardSheetHeight * gameOptions.cardScale * 1.1;
+        this.cardsInGame[cardToMove].y += dir * gameOptions.cardSheetHeight;
         if (cardToMove == 1) {
             var tween = game.add.tween(this.cardsInGame[cardToMove]).to({
                 y: game.height * 1 / 2,
@@ -569,7 +584,7 @@ playGame.prototype = {
     },
 
     makeWinnerCard: function(cardIndex, choice) {
-        var card = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/12) + barajaSprite.height/2, "cards0");
+        var card = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/4) + barajaSprite.height/2, "cards0");
         card.anchor.set(0.5);
         card.scale.set(gameOptions.cardScale);
         var carta = cartasJugadas[cartasJugadas.length-1];        
@@ -897,7 +912,7 @@ console.log("validacion de ultimo turno")
 
 
     flipCard: function(e, cardFront) {
-        e.cardBack = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/12) + barajaSprite.height/2, "fondoCarta");
+        e.cardBack = game.add.sprite((game.width * 1/6) + barajaSprite.width/2, (game.height * 1/4) + barajaSprite.height/2, "fondoCarta");
         e.cardBack.scale.set(gameOptions.cardScale);
         e.cardBack.anchor.set(0.5);
         //e.cardBack.scale.set(gameOptions.cardScale);
