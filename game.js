@@ -70,7 +70,7 @@ playGame.prototype = {
         game.load.spritesheet("cuadroUsuarioSheet", "cuadro_usuario-01.png", 1400,175 );
         game.load.spritesheet("avatarU", "Avatars-01.png", 85, 90);
         game.load.spritesheet("avatarD", "Avatars-02.png", 85, 87);
-        game.load.spritesheet("publicidad", "Publicidad_barra _inferior-01.png");
+        game.load.spritesheet("publicidad", "Publicidad_barra _inferior-01.png",519 ,0);
         game.load.spritesheet("logoJuego", "logo -01.png");
         game.load.spritesheet("button3", "button3.png", 302, 200);
         game.load.spritesheet("button5", "button5.png", 302, 200);
@@ -204,8 +204,22 @@ playGame.prototype = {
 
         
 
-        publicidad= game.add.sprite(game.width/1000, game.height/1.129, "publicidad");
-        publicidad.scale.setTo(1.44,1.38);
+        publicidad= game.add.sprite(game.width/4.9, game.height/1.20, "publicidad");
+        //publicidad.scale.setTo(1.44,1.38);
+        publicidad.scale.setTo(3.5,2);
+
+        var tweenPublicidad = game.add.tween(publicidad).to({
+        }, 10000, Phaser.Easing.Linear.None, true).loop(true);
+
+        
+        tweenPublicidad.onLoop.add(function() {
+            if (publicidad.frame >= 3) {
+                publicidad.frame = 0;
+            }
+            else {
+                publicidad.frame++;
+            }
+        }, this);
 
         logo= game.add.sprite(game.width/ 2.35, game.height/250, "logoJuego");
         logo.scale.setTo(0.5, 0.5);
