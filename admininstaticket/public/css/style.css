@@ -1,0 +1,55 @@
+body 
+{
+    margin:  0 auto;
+    background: white url(../img/BACKJUEGO.png) no-repeat center top;
+    background-repeat: no-repeat;
+    background-size: 100% 720px;
+}
+
+.container
+{
+width: 425px;
+height: 550px;
+text-align: center;
+background-color: rgba(0,0,0, 0.5);
+border-radius: 4px;
+margin: 0 auto;
+margin-top: 150px;
+}
+
+.container img 
+{
+width: 220px;
+height: 220px;
+margin-top: -100px;
+margin-bottom: 30px;	
+}
+
+.container input[type="text"],input[type="password"] 
+{
+height: 45px;
+width: 300px;
+font-size: 18px;
+margin-bottom: 30px;
+margin-top: -20px;
+padding-left: 30px;	
+padding-right: 60px;
+}
+
+.container span
+{
+font-size: 35px;
+color: #778899;
+margin-top: -20px;
+}
+
+.container button 
+{
+height: 35px;
+margin-top: -20px;
+}
+
+.container a 
+{
+margin-right: 30px;	
+}
