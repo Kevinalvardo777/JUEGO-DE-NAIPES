@@ -109,9 +109,6 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
 
 
         game.load.spritesheet("mano", "js/game_cartas/recurso_juego/imagenes/Mano-01.png", 570, 0);
-        game.load.spritesheet("button3", "js/game_cartas/recurso_juego/imagenes/button3.png", 302, 200);
-        game.load.spritesheet("button5", "js/game_cartas/recurso_juego/imagenes/button5.png", 302, 200);
-
 
         game.load.spritesheet("indicaciones", "js/game_cartas/recurso_juego/imagenes/indicaciones1.png", 500, 184);
         game.load.spritesheet("barraCeleste", "js/game_cartas/recurso_juego/imagenes/Barra_mayor_menor_celeste.png", 170, 0)
@@ -205,12 +202,6 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
             }
         }, this);
 
-        /*ruleta= game.add.sprite( 1.03*game.width - (game.width /6.55) , game.height/3.6, "ruleta");*/
-        /*ruleta.scale.setTo(1.2,1.2);*/
-
-        //botonV = game.add.sprite((game.width * 255/384) , game.height * 3/8, "botonV");
-        //boton = game.add.sprite((game.width * 255/384), game.height * 3/8, "boton");
-
         botonV = game.add.sprite(game.width * 0.65, game.height * 1 / 6, "barraVerde");
         botonV.frame = 3;
         botonV.scale.setTo(1.44, 1.3);
@@ -289,21 +280,6 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
         if (this.check()) {
             this.finalizar(this);
         }
-        console.log(gameGlobal.turno)
-
-        var button3 = game.add.button(game.width * 3 / 8, game.height * 3 / 4, 'button3');
-        button3.scale.setTo(0.5, 0.5);
-        button3.inputEnabled = true;
-
-        var button5 = game.add.button(game.width * 3 / 5.3, game.height * 3 / 4, 'button5');
-        button5.scale.setTo(0.5, 0.5);
-        button5.inputEnabled = true;
-
-        var mensaje3 = game.add.text(game.width * 3 / 60, game.height / 5, 'Usted tiene 3 intentos', {fontSize: '45px', fill: '#FFFFFF'});
-        var mensaje5 = game.add.text(game.width * 3 / 60, game.height / 5, 'Usted tiene 5 intentos', {fontSize: '45px', fill: '#FFFFFF'});
-        mensaje3.visible = false;
-        mensaje5.visible = false;
-
 
         this.playerScoreText = game.add.text(game.width * 4 / 6.32, game.height * 5 / 140, '' + gameGlobal.playerScore, {fontFamily: 'courier', fontSize: '110px', fill: '#FFFFFF'});
         this.machineScoreText = game.add.text((game.width / 3.66) + puntajeM.width / 2, game.height * 5 / 140, '' + gameGlobal.machineScore, {fontFamily: 'monospace', fontSize: '110px', fill: '#FFFFFF'});
@@ -396,24 +372,6 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
         swipeDown.anchor.set(0.5);
         this.infoGroup.add(swipeDown);
         game.input.onDown.add(this.beginSwipe, this);
-
-
-//Accion boton 3
-        button3.events.onInputDown.add(function () {
-            mensaje5.visible = false;
-            mensaje3.visible = true;
-
-            gameGlobal.partidas = 3;
-        });
-
-//Accion boton 5
-        button5.events.onInputDown.add(function () {
-            mensaje5.visible = true;
-            mensaje3.visible = false;
-
-            gameGlobal.partidas = 5;
-        });
-        console.log(cartasJugadas)
         gameGlobal.turno += 1;
 
     },
@@ -452,28 +410,12 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
             ultimaM = ultima % 13
             if (Math.floor(Math.random() * 10) < 7) {
                 while (cartaM < ultimaM - 3 || cartaM > ultimaM + 3 || cartaM == ultimaM || cartasJugadas.indexOf(carta) !== -1 || cartasLimites.indexOf(carta) !== -1) {
-                    console.log("Cartas no cercanas " + ultimaM + ", " + cartaM)
                     cardIndex += 2;
                     carta = this.deck[cardIndex];
                     cartaM = carta % 13;
                 }
             }
 
-//Que pierda si ganador = false
-            /*
-             if (gameGlobal.turno == gameGlobal.partidas-1) {
-             if (gameGlobal.ganador) {                    
-             console.log("Aqui se comprueba")
-             cartaM = carta % 13
-             ultimaM = ultima % 13
-             while (cartaM <= ultimaM) {
-             console.log("Cartas no cercanas " + ultimaM + ", " + cartaM)
-             cardIndex += 2;
-             carta = this.deck[cardIndex];
-             cartaM = carta % 13;
-             }
-             }
-             }*/
         }
 
         cartasJugadas.push(carta);
@@ -503,35 +445,27 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
             if (swipeNormal.y > 0.8) {
                 barraCeleste.visible = false;
                 boton.visible = false;
-                console.log("BOton V")
-                console.log(botonV.y)
                 game.add.tween(botonV).to({
                     y: (game.height * 0.36)
                 }, 1000, Phaser.Easing.Cubic.Out, true);
-                console.log(botonV.y)
                 if (gameGlobal.turno >= gameGlobal.partidas / 2) {        //Si esta en el ultimo turno
                     console.log("Entro a menor")
                     var cartaSalvavidas = this.makeWinnerCard(1, false);
                     this.cardsInGame = [this.cardsInGame[0], cartaSalvavidas];
                 }
-                console.log("Se llama a handleSwipe(1)")
                 this.handleSwipe(1);
             }
             if (swipeNormal.y < -0.8) {
                 barraCeleste.visible = false;
                 boton.visible = false;
-                console.log("BOton V")
-                console.log(botonV.y)
                 game.add.tween(botonV).to({
                     y: (game.height * -0.03)
                 }, 1000, Phaser.Easing.Cubic.Out, true);
-                console.log(botonV.y)
                 if (gameGlobal.turno >= gameGlobal.partidas / 2) {        //Si esta en el ultimo turno
                     console.log("Entro a mayor")
                     var cartaSalvavidas = this.makeWinnerCard(1, true);
                     this.cardsInGame = [this.cardsInGame[0], cartaSalvavidas];
                 }
-                console.log("Se llama a handleSwipe(-1)")
                 this.handleSwipe(-1);
             }
         } else {
@@ -539,9 +473,7 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
         }
     },
     handleSwipe: function (dir) {
-        console.log("Empieza handleSwipe")
         var cardToMove = (this.nextCardIndex + 1) % 2;
-        console.log("Carta a mover: " + cardToMove)
         this.cardsInGame[cardToMove].visible = true;
         this.cardsInGame[cardToMove].y += dir * gameOptions.cardSheetHeight;
         if (cardToMove == 1) {
@@ -557,7 +489,6 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
         tween.onComplete.add(function () {
             var newCard = cartasJugadas[cartasJugadas.length - 1];
             var oldCard = cartasJugadas[cartasJugadas.length - 2];
-            console.log("direccion :" + dir)
             if (((dir == -1) && ((newCard % 13 > oldCard % 13) || ((newCard % 13 == oldCard % 13) && (newCard > oldCard))))
                     || ((dir == 1) && ((newCard % 13 < oldCard % 13) || ((newCard % 13 == oldCard % 13) && (newCard < oldCard))))) {
 //Si acierta el jugador                
@@ -573,26 +504,6 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
                 game.time.events.add(Phaser.Timer.SECOND, this.fadeCards, this);
 
             }
-        }, this)
-    },
-    moveCards: function () {
-        console.log("Empieza moveCards")
-        var cardToMove = this.nextCardIndex % 2;
-        var moveOutTween = game.add.tween(this.cardsInGame[cardToMove]).to({
-            x: game.width + gameOptions.cardSheetWidth * gameOptions.cardScale
-        }, 500, Phaser.Easing.Cubic.Out, true);
-        cardToMove = (this.nextCardIndex + 1) % 2
-        var moveDownTween = game.add.tween(this.cardsInGame[cardToMove]).to({
-            y: game.height / 2
-        }, 500, Phaser.Easing.Cubic.Out, true);
-        moveDownTween.onComplete.add(function () {
-            var cardToMove = this.nextCardIndex % 2
-            this.cardsInGame[cardToMove].loadTexture("cards" + this.getCardTexture(this.deck[this.nextCardIndex]));
-            this.cardsInGame[cardToMove].frame = this.getCardFrame(this.deck[this.nextCardIndex]);
-            this.nextCardIndex = (this.nextCardIndex + 1) % 52;
-            this.cardsInGame[cardToMove].x = gameOptions.cardSheetWidth * gameOptions.cardScale / -2;
-            game.input.onDown.add(this.beginSwipe, this);
-            this.infoGroup.visible = true;
         }, this)
     },
 
@@ -680,48 +591,35 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
          }        
          }*/
 //Que pierda si ganador = false
-        console.log("validacion de ultimo turno")
         if (gameGlobal.turno == gameGlobal.partidas) {    //Si es el ultimo turno
-            console.log("Ultimo turno")
             if (comprobador == 1) {                         //Si se esta sacando la segunda carta
-                console.log("Ultima carta")
                 if (gameGlobal.ganador) {                   //Si es ganador
-                    console.log("Es ganador");
                     cartaM = carta % 13
                     ultimaM = ultima % 13
                     if (choice) {                           //Si escogio mayor
-                        console.log("Escogio mayor")
                         while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
                         }
                     } else {                                //Si escogio menor
-                        console.log("Escogio menor")
                         while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
                         }
                     }
                 } else {
-                    console.log("Es perdedor")
                     cartaM = carta % 13
                     ultimaM = ultima % 13
                     if (choice) {                           //Si escogio mayor
-                        console.log("Escogio mayor")
                         while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
                         }
                     } else {                                //Si escogio menor
-                        console.log("Escogio menor")
                         while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
@@ -730,39 +628,26 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
                 }
             }
 
-
-            console.log("Carta Salvavidas" + carta % 13)
             cartasJugadas[cartasJugadas.length - 1] = carta;
-            console.log(cartasJugadas)
             card.loadTexture("cards" + this.getCardTexture(carta));
             card.frame = this.getCardFrame(carta);
             return card;
-
-
         }
 
         //Para penultimo turno 
-        console.log("validacion de penultimo turno")
-
         if (gameGlobal.turno == gameGlobal.partidas - 1) {    //Si es el ultimo turno
-            console.log("penultimo turno")
             if (comprobador == 1) {                         //Si se esta sacando la segunda carta
-                console.log("Ultima carta")
                 cartaM = carta % 13
                 ultimaM = ultima % 13
                 if (gameGlobal.playerScore == 1) {
                     if (choice) {                           //Si escogio mayor
-                        console.log("Escogio mayor")
                         while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
                         }
                     } else {                                //Si escogio menor
-                        console.log("Escogio menor")
                         while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
@@ -771,17 +656,13 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
 
                 } else {
                     if (choice) {                           //Si escogio mayor
-                        console.log("Escogio mayor")
                         while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
                         }
                     } else {                                //Si escogio menor
-                        console.log("Escogio menor")
                         while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
@@ -794,8 +675,6 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
         }
 
         /**** CONDICIONES BOTON 5 ***/
-
-        console.log("validacion de ultimo turno")
         if (gameGlobal.turno == gameGlobal.partidas) {    //Si es el ultimo turno
             console.log("Ultimo turno")
             if (comprobador == 1) {                         //Si se esta sacando la segunda carta
@@ -857,27 +736,20 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
         }
 
         //Para penultimo turno 
-        console.log("validacion de penultimo turno")
 
         if (gameGlobal.turno == gameGlobal.partidas - 1) {    //Si es el penultimo turno
-            console.log("penultimo turno")
             if (comprobador == 1) {                         //Si se esta sacando la segunda carta
-                console.log("Ultima carta")
                 cartaM = carta % 13
                 ultimaM = ultima % 13
                 if (gameGlobal.playerScore == 2 && gameGlobal.machineScore == 1) {
                     if (choice) {                           //Si escogio mayor
-                        console.log("Escogio mayor")
                         while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
                         }
                     } else {                                //Si escogio menor
-                        console.log("Escogio menor")
                         while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
@@ -886,17 +758,13 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
 
                 } else if (gameGlobal.playerScore == 1 && gameGlobal.machineScore == 2) {
                     if (choice) {                           //Si escogio mayor
-                        console.log("Escogio mayor")
                         while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
                         }
                     } else {                                //Si escogio menor
-                        console.log("Escogio menor")
                         while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
@@ -907,10 +775,7 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
 
             }
 
-
-            console.log("Carta Salvavidas" + carta % 13)
             cartasJugadas[cartasJugadas.length - 1] = carta;
-            console.log(cartasJugadas)
             card.loadTexture("cards" + this.getCardTexture(carta));
             card.frame = this.getCardFrame(carta);
             return card;
@@ -921,22 +786,17 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
         if (gameGlobal.turno == gameGlobal.partidas - 2) {    //Si es el antepenultimo turno
             console.log("antepenultimo turno")
             if (comprobador == 1) {                         //Si se esta sacando la segunda carta
-                console.log("Ultima carta")
                 cartaM = carta % 13
                 ultimaM = ultima % 13
                 if ((gameGlobal.playerScore == 1 && gameGlobal.machineScore == 1) || (gameGlobal.playerScore == 2 && gameGlobal.machineScore == 0)) {
                     if (choice) {                           //Si escogio mayor
-                        console.log("Escogio mayor")
                         while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
                         }
                     } else {                                //Si escogio menor
-                        console.log("Escogio menor")
                         while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
@@ -945,17 +805,13 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
 
                 } else if (gameGlobal.playerScore == 0 && gameGlobal.machineScore == 2) {
                     if (choice) {                           //Si escogio mayor
-                        console.log("Escogio mayor")
                         while (cartaM <= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy pequeña " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
                         }
                     } else {                                //Si escogio menor
-                        console.log("Escogio menor")
                         while (cartaM >= ultimaM || cartasJugadas.indexOf(carta) !== -1) {
-                            console.log("Cartas muy grande " + ultimaM + ", " + cartaM)
                             cardIndex += 2;
                             carta = this.deck[cardIndex];
                             cartaM = carta % 13;
@@ -1006,8 +862,7 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
         cardFront.isFlipping = true;
         cardFront.scale.set(gameOptions.cardScale);
         cardFront.angle += 5;
-        console.log("Tamanos ")
-        console.log(gameOptions.cardScale)
+
         flipTween = game.add.tween(e.cardBack.scale).to({
             x: 0,
             y: gameOptions.cardScale
@@ -1046,7 +901,6 @@ var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
 
             e.cardBack.isFlipping = false;
         });
-        console.log("FLIP!! " + e.cardBack)
         if (gameGlobal.turno == gameGlobal.partidas) {
             e.cardBack.visible = false;
         } else {
