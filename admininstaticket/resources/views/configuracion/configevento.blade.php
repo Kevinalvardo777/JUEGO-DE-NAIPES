@@ -358,12 +358,13 @@ $("#evento_id").change(function () {
 });
 $("#evento_id_c").change(function () {
     $('#mensajes').removeClass('alert alert-danger');
-    $('#mensajes').addClass('hide');
+    //$('#mensajes').addClass('hide');
     var t = $('#tbl_J_C').DataTable();
     t.clear().draw();
-    $("#div_tipo_url_id_c").addClass("hide");
+    /*$("#div_tipo_url_id_c").addClass("hide");
     $("#div_configuracion_evento_url_c").addClass("hide");
     $("#btn_aniadirC").addClass("hide");
+    */
     $("#btn_buscarEventoC").click();
     locations = [];
 });

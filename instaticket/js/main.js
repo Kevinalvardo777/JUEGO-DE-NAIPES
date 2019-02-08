@@ -2,7 +2,7 @@
 
 //var urlServicios = "http://192.168.0.100:8080/wsInstaticket/servicios.php";
 
-var urlServicios = "/wsInstaticket/servicios.php";
+var urlServicios = "/GitHub/JUEGO-DE-NAIPES/wsInstaticket/servicios.php";
 
 
 
