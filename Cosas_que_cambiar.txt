@@ -1,0 +1,11 @@
+admininstaticket/.env
+
+Linea 11 contraseña base de datos
+
+wsinstaticket/base/utilbase.php
+
+Linea 29 contraseña base de datos
+
+instaticket/js/main.js
+
+linea 4 poner la ruta a /wsinstaticket/servicios.php
