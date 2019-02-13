@@ -46,9 +46,11 @@ playGame.prototype = {
 
 //obtine el valor de la funcion obtenerResultadoJuego() para su uso en  el juego y decidir si se pierde o gana
 var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
-    console.log(dataJuego);
+    console.log(dataJuego.ganador);
 
-
+if (dataJuego.ganador!=null) {
+    gameGlobal.ganador = true;
+}
 
         try {
 
