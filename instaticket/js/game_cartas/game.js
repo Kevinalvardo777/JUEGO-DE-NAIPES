@@ -336,6 +336,15 @@ if(dataJuego.ganador!=null){
             this.ruleta = game.add.sprite(1.03 * game.width - (game.width / 6.55), game.height / 3.6, "ruleta");
             this.ruleta.scale.setTo(1.2, 1.2);
 
+            this.pizza= game.add.sprite(1.03 * game.width - (game.width / 11.8), game.height / 2.5, "pizza");
+            this.pizza.scale.setTo(0.21, 0.21);
+
+            this.gorra= game.add.sprite(1.03 * game.width - (game.width / 9.3), game.height / 2.1, "gorra");
+            this.gorra.scale.setTo(0.12, 0.11);
+
+            this.termo= game.add.sprite(1.03 * game.width - (game.width / 8.9), game.height / 1.96, "termo");
+            this.termo.scale.setTo(0.18, 0.21);
+
         }
 
         /*
@@ -562,6 +571,14 @@ if(dataJuego.ganador!=null){
         this.ruleta = game.add.sprite(1.03 * game.width - (game.width / 6.55), game.height / 3.6, "ruleta");
         this.ruleta.scale.setTo(1.2, 1.2);
 
+        this.pizza= game.add.sprite(1.03 * game.width - (game.width / 11.8), game.height / 2.5, "pizza");
+        this.pizza.scale.setTo(0.21, 0.21);
+
+        this.gorra= game.add.sprite(1.03 * game.width - (game.width / 9.3), game.height / 2.1, "gorra");
+        this.gorra.scale.setTo(0.12, 0.11);
+
+        this.termo= game.add.sprite(1.03 * game.width - (game.width / 8.9), game.height / 1.96, "termo");
+        this.termo.scale.setTo(0.18, 0.21);
     },
 
     addPlayerScore: function () {
