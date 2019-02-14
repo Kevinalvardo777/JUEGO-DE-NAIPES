@@ -273,7 +273,7 @@ function obtenerDataJuego(cicloEventoId,eventoId, nombreEvento, tipo) {
         window.location.href = "game.php";
     }else{
         
-     window.location.href = "cartas.html";
+     window.location.href = "pantalla.html";
     }
 //console.log(JSON.parse(sessionStorage.getItem("dataPrincipal")));
     } else {
