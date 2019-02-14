@@ -958,7 +958,7 @@ if(dataJuego.ganador!=null){
 
     finalizar: function (e) {
         //mensaje de final del juego
-        var mensaje;
+       /* var mensaje;
 
         var pared = game.add.sprite(0, 0, "pared")
         //game.world.bringToTop(pared);
@@ -985,20 +985,20 @@ if(dataJuego.ganador!=null){
 
         logo = game.add.sprite(game.width / 2.35, game.height / 250, "logoJuego");
         logo.scale.setTo(0.5, 0.5);
-
+        */
         if (gameGlobal.playerScore > gameGlobal.machineScore) {
 window.location.href = "ganar.php";
-            mensaje = game.add.text(game.width * 5 / 14, game.height / 3, 'Fin del juego\nUsted Gana', {fontSize: '150px', fill: '#000'});
+           // mensaje = game.add.text(game.width * 5 / 14, game.height / 3, 'Fin del juego\nUsted Gana', {fontSize: '150px', fill: '#000'});
             game.paused = true;
         } else {
 
             window.location.href = "perder.php";
-            mensaje = game.add.text(game.width * 5 / 14, game.height / 3, 'Fin del juego\nUsted Pierde', {fontSize: '150px', fill: '#000'});
+            //mensaje = game.add.text(game.width * 5 / 14, game.height / 3, 'Fin del juego\nUsted Pierde', {fontSize: '150px', fill: '#000'});
             game.paused = true;
         }
 
         //var continuar = game.add.text(game.width * 11/28, game.height * 2/3, "Continuar", { fontSize: '150px', fill: '#000' })
-        var continuar = game.add.sprite(game.width * 10 / 28, game.height * 3 / 6, "botonPlay")
+        /*var continuar = game.add.sprite(game.width * 10 / 28, game.height * 3 / 6, "botonPlay")
         continuar.inputEnabled = true;
 //Si se presiona continuar
         continuar.events.onInputDown.add(function () {
@@ -1010,10 +1010,7 @@ window.location.href = "ganar.php";
                 partidas: gameGlobal.partidas,
                 ganador: gameGlobal.ganador
             }
-            /*
-             e.cartaMaquina = [];
-             e.cartaJugador = [];
-             */
+        
             for (var i = 0; i < gameGlobal.partidas; i++) {
                 e.cartaMaquina[i].destroy();
                 e.cartaJugador[i].destroy();
@@ -1028,7 +1025,7 @@ window.location.href = "ganar.php";
             pared.destroy();
             mensaje.destroy();
 
-        });
+        });*/
 
 
     }
