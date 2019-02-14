@@ -39,17 +39,17 @@ playGame.prototype = {
 
         var dataEvento = JSON.parse(sessionStorage.getItem("dataEvento"));
         console.log(dataEvento);
-		
-		var evento = JSON.parse(sessionStorage.getItem("eventoAlmacenado"));
-		gameGlobal.partidas=evento.turnos;
-	console.log("numero de turnos: "+evento.turnos);
+        
+        var evento = JSON.parse(sessionStorage.getItem("eventoAlmacenado"));
+        gameGlobal.partidas=evento.turnos;
+    console.log("numero de turnos: "+evento.turnos);
 
 //obtine el valor de la funcion obtenerResultadoJuego() para su uso en  el juego y decidir si se pierde o gana
 var dataJuego = JSON.parse(sessionStorage.getItem("dataJuego"));
     console.log(dataJuego.ganador);
 
-if (dataJuego.ganador!=null) {
-    gameGlobal.ganador = true;
+if(dataJuego.ganador!=null){
+    gameGlobal.ganador=true;
 }
 
         try {
@@ -63,6 +63,7 @@ if (dataJuego.ganador!=null) {
                      if (audio === dataEvento[i]['tipo_url_nombre']) {
                      this.load.audio(dataEvento[i]['tipo_url_nombre'], dataEvento[i]['url']);
                      } else { EN ESTE CASO SOLO TENEMOS IMAGEN*/
+
                     if ("cards0" === dataEvento[i]['tipo_url_nombre'] || "cards1" === dataEvento[i]['tipo_url_nombre'] || "cards2" === dataEvento[i]['tipo_url_nombre'] || "cards3" === dataEvento[i]['tipo_url_nombre'] || "cards4" === dataEvento[i]['tipo_url_nombre'] || "cards5" === dataEvento[i]['tipo_url_nombre'] || "cards6" === dataEvento[i]['tipo_url_nombre'] || "cards7" === dataEvento[i]['tipo_url_nombre'] || "cards8" === dataEvento[i]['tipo_url_nombre'] || "cards9" === dataEvento[i]['tipo_url_nombre']) {
                         this.load.spritesheet(dataEvento[i]['tipo_url_nombre'], dataEvento[i]['url'], gameOptions.cardSheetWidth, gameOptions.cardSheetHeight);
                     } else
@@ -116,6 +117,9 @@ if (dataJuego.ganador!=null) {
         game.load.spritesheet("barraCeleste", "js/game_cartas/recurso_juego/imagenes/Barra_mayor_menor_celeste.png", 170, 0)
         game.load.spritesheet("barraVerde", "js/game_cartas/recurso_juego/imagenes/Barra_mayor_menor_verde.png", 170, 0)
         game.load.spritesheet("swipe", "js/game_cartas/recurso_juego/imagenes/swipe.png", 80, 130);
+        game.load.spritesheet("gorra", "js/game_cartas/recurso_juego/imagenes/gorra.png", 1500, 800);
+        game.load.spritesheet("pizza", "js/game_cartas/recurso_juego/imagenes/pizza.png", 850, 400);
+        game.load.spritesheet("termo", "js/game_cartas/recurso_juego/imagenes/termo.png", 1000, 700);
         game.load.spritesheet("tuPuntaje", "js/game_cartas/recurso_juego/imagenes/fichas partes-01.png", 250, 167);
         game.load.spritesheet("puntajeMaquina", "js/game_cartas/recurso_juego/imagenes/fichas partes-06.png", 250, 167);
         game.load.spritesheet("logoJuego", "js/game_cartas/recurso_juego/imagenes/logo -01.png");
@@ -133,8 +137,18 @@ if (dataJuego.ganador!=null) {
         mesaF1 = game.add.tileSprite(0, 0, Math.floor(gameOptions.gameWidth / 2) * 3.5, Math.floor(gameOptions.gameHeight / 2) * 2, 'background');
         mesaF1.scale.setTo(1.44, 1.3);
 
+
         this.ruleta = game.add.sprite(1.03 * game.width - (game.width / 6.55), game.height / 3.6, "ruleta");
         this.ruleta.scale.setTo(1.2, 1.2);
+
+        this.pizza= game.add.sprite(1.03 * game.width - (game.width / 11.8), game.height / 2.5, "pizza");
+        this.pizza.scale.setTo(0.21, 0.21);
+
+        this.gorra= game.add.sprite(1.03 * game.width - (game.width / 9.3), game.height / 2.1, "gorra");
+        this.gorra.scale.setTo(0.12, 0.11);
+
+        this.termo= game.add.sprite(1.03 * game.width - (game.width / 8.9), game.height / 1.96, "termo");
+        this.termo.scale.setTo(0.18, 0.21);
 
         if (gameGlobal.turno == 0) {
             barajaSprite = game.add.sprite(game.width * 1 / 8.2, 0, "baraja");
