@@ -40,7 +40,7 @@
                             <center>  <img src="img/LOGO DEL JUEGO.png" style="max-width: 100vw;width: 70vh;height: 70vh;" alt=""/></center>
                         <div class="col-md-4 col-md-offset-4">
                             <div class="col-md-12">
-                                <a href="cartas.html" class="btn" style="width: 100%;border-radius: 50px;background: black;border:none;height: 50px;color: white;font-size: 200%" >
+                                <a href="pantalla.html" class="btn" style="width: 100%;border-radius: 50px;background: black;border:none;height: 50px;color: white;font-size: 200%" >
                                     <center>
                                         <img src="img/FLECHA CONTINUAR.png" alt="80%"/>
                                         VOLVER A JUGAR

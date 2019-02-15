@@ -127,7 +127,7 @@
                                         IMPRIMIR
                                     </center>
                                 </button>
-                                <a id="volver" href="game.php" class="btn hide" style="width: 100%;border-radius: 50px;background: black;border:none;height: 50px;color: white;font-size: 200%" >
+                                <a id="volver" href="pantalla.html" class="btn hide" style="width: 100%;border-radius: 50px;background: black;border:none;height: 50px;color: white;font-size: 200%" >
                                     <center>
                                         <img src="img/FLECHA CONTINUAR.png" alt=""/>
                                         VOLVER A JUGAR
