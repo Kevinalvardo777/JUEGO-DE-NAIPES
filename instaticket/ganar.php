@@ -77,12 +77,12 @@
     </head>
     <body>
         <div class="fondoBackground">
-            <div class="bannerindex">
+            <div class="bannerindex2">
                 <div class="col-xs-4 col-xs-offset-4">
                     <center><a href="eventos.php"><img src="img/LOGO INSTATICKET.png" style="height: 10vh" alt=""/></a></center>
                 </div>
             </div>
-            <div class="backgroundindex" style="overflow: auto">
+            <div class="backgroundindex2" style="overflow: auto">
                 <div class="container-fluid">
                     <br><br><br><br>
                     <div class="row">

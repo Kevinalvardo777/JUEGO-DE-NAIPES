@@ -21,12 +21,12 @@
     </head>
     <body>
         <div class="fondoBackground">
-            <div class="bannerindex">
+            <div class="bannerindex2">
                 <div class="col-md-4 col-md-offset-4">
                     <center><a href="eventos.php"><img src="img/LOGO INSTATICKET.png" style="height: 10vh" alt=""/></a></center>
                 </div>
             </div>
-            <div class="backgroundindex">
+            <div class="backgroundindex2">
                 <div class="container-fluid">
                     <br>
                     <div class="row">
